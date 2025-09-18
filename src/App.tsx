@@ -1,10 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from '/react.svg';
+import viteLogo from '/vite.svg';
+import './index.css';
+import data from './dummy/happiness_df.json';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  if (count > data.length) {
+    setCount(0);
+  }
 
   return (
     <>
@@ -22,14 +27,12 @@ function App() {
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          The current country is {data[count].Country} with the happiness of{' '}
+          {data[count].Happiness}
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
