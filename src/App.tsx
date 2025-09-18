@@ -1,38 +1,19 @@
-import { useState } from 'react';
-import reactLogo from '/react.svg';
-import viteLogo from '/vite.svg';
 import './index.css';
-import data from './dummy/happiness_df.json';
+import '@mantine/core/styles.css';
+import { createTheme, MantineProvider } from '@mantine/core';
+import { HeaderSearch } from './components/HeaderSearch';
+import MainContent from './components/MainContent';
 
-function App() {
-  const [count, setCount] = useState(0);
+const theme = createTheme({
+  fontFamily: 'Arial Black',
+  primaryColor: 'green',
+});
 
-  if (count > data.length) {
-    setCount(0);
-  }
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          The current country is {data[count].Country} with the happiness of{' '}
-          {data[count].Happiness}
-        </p>
-      </div>
-    </>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <HeaderSearch />
+      <MainContent />
+    </MantineProvider>
   );
 }
-
-export default App;
