@@ -29,7 +29,7 @@ createRoot(document.getElementById('root')!).render(
 
 // --- LEARNING ---
 
-// [_] read on TypeScript, learn TS fully
+// [_] read on TypeScript, learn TS fully: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
 // - what is typescript for? so far in this TSX project there have been no differences with JS
 // - is every JS code also TSX code?
 // - take notes
