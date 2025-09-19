@@ -25,11 +25,11 @@ createRoot(document.getElementById('root')!).render(
 // [v] deconstruct default vite landing page
 // [v] import json to frontend
 // [v] install and try mantine
-// [_] construct a dummy ui frontend with mantine
+// [v] construct a dummy ui frontend with mantine
 
 // --- LEARNING ---
 
-// [_] read on TypeScript, learn TS fully: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
+// [v] read on TypeScript, learn TS fully: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
 // - what is typescript for? so far in this TSX project there have been no differences with JS
 // - is every JS code also TSX code?
 // - take notes
@@ -38,9 +38,10 @@ createRoot(document.getElementById('root')!).render(
 
 // --- FRONTEND ---
 
+// [_] understand WHERE to use TS here | or in my other projects (incorporate to other projects!)
 // [_] get a piece of paper and a pencil to draw / iterate the ui
 // (use these always)
-// [_] make the UI in typescript until it's good
+// [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
 
 // --- DOTNET ---
 
