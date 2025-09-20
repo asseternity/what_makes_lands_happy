@@ -4,9 +4,11 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import { globalIgnores } from 'eslint/config';
+import mantine from 'eslint-config-mantine';
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  ...mantine,
+  globalIgnores(['dist', '**/*.{mjs,cjs,js,d.ts,d.mts}']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

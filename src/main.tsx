@@ -33,11 +33,16 @@ createRoot(document.getElementById('root')!).render(
 // - what is typescript for? so far in this TSX project there have been no differences with JS
 // - is every JS code also TSX code?
 // - take notes
-// [_] read on Mantine, learn mantine fully
-// [_] learn navigation to different pages with Mantine
+// [v] read on Mantine
+// [v] switch to Shadcn - fill my notes
+// [v] should shadcn go with something else - radix or tailwind?
+// [v] learn tailwind CSS
+// [v] learn radix UI
+// [v] navigation to different pages with Shadcn?
 
 // --- FRONTEND ---
 
+// [_] play around, make something with TS + Shadcn
 // [_] understand WHERE to use TS here | or in my other projects (incorporate to other projects!)
 // [_] get a piece of paper and a pencil to draw / iterate the ui
 // (use these always)
