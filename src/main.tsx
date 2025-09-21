@@ -8,9 +8,14 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>
 );
 
+// Minimal Viable Product (MVP):
+// - Cleaned, merged PostgreSQL dataset with provenance.
+// - React + TypeScript dashboard: choropleth/map, correlation chart, country detail view.
+// - .NET API serving filtered queries and basic correlation endpoints.
+// - Jest/Vitest tests for critical UI components and one backend logic test.
+
 // features:
-// - landing page
-// - happiness colored map
+// - landing page with a happiness colored map
 // - searching for a country
 // - country profiles with strength and weaknesses breakdown
 // - detailed data view: big table with analysis of means and medians, etc
@@ -44,8 +49,10 @@ createRoot(document.getElementById('root')!).render(
 
 // [v] play around, make something with TS + Shadcn
 // [v] get a piece of paper and a pencil to draw / iterate the ui (use these always)
-// [_] understand WHERE to use TS here | or in my other projects (incorporate to other projects!)
 // [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
+// [_] finish frontend
+// [_] choropleth the map
+// [_] jest/vitest data and components
 // [_] write readme, host on GH pages
 
 // --- NDS ---
