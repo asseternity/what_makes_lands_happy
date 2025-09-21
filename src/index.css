@@ -3,7 +3,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Inter';
+  src: url('/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 @theme inline {
+  --font-display: 'Inter';
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import reactLogo from '/react.svg';
-import viteLogo from '/vite.svg';
+import { useState, useRef } from 'react';
+import logo from '/world-map-svgrepo-com.svg';
 import data from '../dummy/happiness_df.json';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,24 +19,28 @@ import {
 import WorldMap from './WorldMap';
 
 function MainContent() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState<number>(1);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   if (count - 1 > data.length) {
     setCount(0);
   }
 
   return (
-    <div className="container w-full h-screen bg-primary-foreground">
+    <div className="container w-full h-screen bg-primary-foreground font-display">
       <div className="bg-primary text-primary-foreground flex flex-row justify-start items-center gap-4 p-3 w-full h-20">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+        <a href="" target="_blank">
+          <img src={logo} className="logo h-16" alt="Vite logo" />
         </a>
         <h1>Happiness Report</h1>
       </div>
-      <div className="card m-10 p-4 flex flex-col justify-center items-center gap-4">
+      <div
+        className="card m-5 p-4 flex flex-col justify-center items-center gap-4 relative"
+        ref={mapContainerRef}
+      >
+        <WorldMap mapContainerRef={mapContainerRef} />
+      </div>
+      <div className="card m-5 p-4 flex flex-col justify-center items-center gap-4">
         <Collapsible>
           <CollapsibleTrigger>What is this project?</CollapsibleTrigger>
           <CollapsibleContent>
@@ -63,7 +66,6 @@ function MainContent() {
             </p>
           </CardContent>
         </Card>
-        <WorldMap />
       </div>
     </div>
   );
