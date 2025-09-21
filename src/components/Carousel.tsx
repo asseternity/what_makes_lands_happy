@@ -30,12 +30,7 @@ type countryData = {
   countryWeakness: string;
 };
 
-export function CarouselOfCards({
-  countryName,
-  happiness,
-  countryStrength,
-  countryWeakness,
-}: countryData) {
+export function CarouselOfCards({ countryName, happiness }: countryData) {
   return (
     <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
       <CarouselContent>

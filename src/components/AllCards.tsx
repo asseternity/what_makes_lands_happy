@@ -23,12 +23,7 @@ type countryData = {
   countryWeakness: string;
 };
 
-export function AllCards({
-  countryName,
-  happiness,
-  countryStrength,
-  countryWeakness,
-}: countryData) {
+export function AllCards({ countryName, happiness }: countryData) {
   return (
     <div className="w-full flex flex-row justify-center items-center gap-4">
       <Card className="bg-accent">

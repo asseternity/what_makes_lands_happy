@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/what_makes_lands_happy/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

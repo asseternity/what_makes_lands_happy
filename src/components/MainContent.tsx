@@ -14,7 +14,6 @@ type CountryData = {
 };
 
 function MainContent() {
-  const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [countryData, setCountryData] = useState<CountryData | null>(null);
@@ -25,7 +24,6 @@ function MainContent() {
       const found =
         data.find((d) => d.Country_clean === selectedCountry) || null;
       setCountryData(found);
-      setFirstLoad(false);
     }
   }, [selectedCountry]);
 
