@@ -17,6 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import WorldMap from './WorldMap';
 
 function MainContent() {
   const [count, setCount] = useState(1);
@@ -26,17 +27,17 @@ function MainContent() {
   }
 
   return (
-    <div className="container w-full h-full">
-      <div className="bg-primary text-secondary flex flex-col justify-center items-center gap-4 p-3">
+    <div className="container w-full h-screen bg-primary-foreground">
+      <div className="bg-primary text-primary-foreground flex flex-row justify-start items-center gap-4 p-3 w-full h-20">
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-        <h1>What Makes Lands Happy?</h1>
+        <h1>Happiness Report</h1>
       </div>
-      <div className="card">
+      <div className="card m-10 p-4 flex flex-col justify-center items-center gap-4">
         <Collapsible>
           <CollapsibleTrigger>What is this project?</CollapsibleTrigger>
           <CollapsibleContent>
@@ -45,8 +46,13 @@ function MainContent() {
             discerning what truly matters when choosing where to root yourself.
           </CollapsibleContent>
         </Collapsible>
-        <Button onClick={() => setCount((count) => count + 1)}>NEXT</Button>
-        <Card>
+        <Button
+          onClick={() => setCount((count) => count + 1)}
+          className="w-14 bg-accent"
+        >
+          NEXT
+        </Button>
+        <Card className="w-50">
           <CardHeader>
             <CardTitle>Happy Countries</CardTitle>
           </CardHeader>
@@ -57,6 +63,7 @@ function MainContent() {
             </p>
           </CardContent>
         </Card>
+        <WorldMap />
       </div>
     </div>
   );
