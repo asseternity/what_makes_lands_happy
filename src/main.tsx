@@ -52,6 +52,7 @@ createRoot(document.getElementById('root')!).render(
 // [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
 // [_] finish frontend
 // [_] choropleth the map
+// [_] add new cool features to practice all the typescript stuff!
 // [_] jest/vitest data and components
 // [_] write readme, host on GH pages
 
