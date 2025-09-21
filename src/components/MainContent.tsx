@@ -1,14 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '/world-map-svgrepo-com.svg';
 import data from '../dummy/happiness_df.json';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WorldMap from './WorldMap';
@@ -20,14 +12,6 @@ type CountryData = {
   Country_clean: string;
   Happiness: number;
 };
-
-function titleCase(s: string): string {
-  return s
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
 
 function MainContent() {
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
@@ -91,7 +75,7 @@ function MainContent() {
         </div>
       </div>
       <div
-        className="card m-5 p-4 flex flex-col justify-center items-center gap-4 relative rounded-full"
+        className="card m-5 p-4 flex flex-col justify-center items-center gap-4 relative rounded-full h-1/3"
         ref={mapContainerRef}
       >
         <WorldMap
