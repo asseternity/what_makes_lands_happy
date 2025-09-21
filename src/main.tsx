@@ -42,22 +42,23 @@ createRoot(document.getElementById('root')!).render(
 
 // --- FRONTEND ---
 
-// [_] play around, make something with TS + Shadcn
+// [v] play around, make something with TS + Shadcn
+// [v] get a piece of paper and a pencil to draw / iterate the ui (use these always)
 // [_] understand WHERE to use TS here | or in my other projects (incorporate to other projects!)
-// [_] get a piece of paper and a pencil to draw / iterate the ui
-// (use these always)
 // [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
-
-// --- DOTNET ---
-
-// [_] switch to dotnet backend
-// [_] make a postgreSQL db in the dotnet backend
-// [_] put dummy NDS into postgresql
-// [_] publish backend via railway
+// [_] write readme, host on GH pages
 
 // --- NDS ---
 
-// [_] connect backend and frontend via api calls
 // [_] finish NDS data science project
 // [_] publish NDS
+
+// --- DOTNET ---
+
+// [_] do a dotnet backend
+// [_] make a postgreSQL db in the dotnet backend
+// [_] put dummy NDS into postgresql
+// [_] publish backend via railway
+// [_] connect backend and frontend via api calls
+
 // [_] publish this project
