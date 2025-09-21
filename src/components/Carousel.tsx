@@ -42,7 +42,7 @@ export function CarouselOfCards({
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
-              <Card>
+              <Card className="bg-accent">
                 <CardHeader>
                   {index === 0 && <CardTitle>Happy Countries</CardTitle>}
                   {index === 1 && <CardTitle>Strengths</CardTitle>}

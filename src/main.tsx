@@ -49,6 +49,8 @@ createRoot(document.getElementById('root')!).render(
 
 // [v] play around, make something with TS + Shadcn
 // [v] get a piece of paper and a pencil to draw / iterate the ui (use these always)
+// [v] all cards at once for big screens
+// [v] narrower "about" for big screens
 // [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
 // [_] finish frontend
 // [_] choropleth the map

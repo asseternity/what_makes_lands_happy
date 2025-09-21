@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
+import { AllCards } from './AllCards';
 
 type CountryData = {
   Country_clean: string;
@@ -98,14 +99,42 @@ function MainContent() {
           callback={setSelectedCountry}
         />
       </div>
-      <div className="flex flex-col justify-center items-center gap-4">
+      <div className="flex flex-col justify-center items-center gap-4 md:hidden">
         <CarouselOfCards
           countryName={selectedCountry}
           happiness={countryData?.Happiness}
           countryStrength="Strength"
           countryWeakness="Weakness"
         />
-        <div className="px-10 mb-5 w-full">
+        <div className="px-10 mb-5 w-full flex flex-row justify-center items-center">
+          <div className="w-60">
+            <h2>About</h2>
+            <AccordionFooter />
+          </div>
+        </div>
+      </div>
+      <div className="hidden md:flex lg:hidden flex-row justify-center items-center gap-15">
+        <CarouselOfCards
+          countryName={selectedCountry}
+          happiness={countryData?.Happiness}
+          countryStrength="Strength"
+          countryWeakness="Weakness"
+        />
+        <div className="flex-1 max-w-70">
+          <h2>About</h2>
+          <AccordionFooter />
+        </div>
+      </div>
+      <div className="hidden lg:flex flex-row justify-center items-center gap-15">
+        <div className="flex-1 max-w-xl">
+          <AllCards
+            countryName={selectedCountry}
+            happiness={countryData?.Happiness}
+            countryStrength="Strength"
+            countryWeakness="Weakness"
+          />
+        </div>
+        <div className="flex-1 max-w-70">
           <h2>About</h2>
           <AccordionFooter />
         </div>
