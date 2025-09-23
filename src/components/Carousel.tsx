@@ -13,7 +13,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import CountryProfile from './CountryProfile';
 
 function titleCase(s: string): string {
   return s
@@ -24,20 +24,27 @@ function titleCase(s: string): string {
 }
 
 type countryData = {
+  flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
   countryStrength: string;
   countryWeakness: string;
 };
 
-export function CarouselOfCards({ countryName, happiness }: countryData) {
+export function CarouselOfCards({
+  flash = false,
+  countryName,
+  happiness,
+}: countryData) {
   return (
     <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
       <CarouselContent>
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
-              <Card className="bg-accent">
+              <Card
+                className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+              >
                 <CardHeader>
                   {index === 0 && <CardTitle>Happy Countries</CardTitle>}
                   {index === 1 && <CardTitle>Strengths</CardTitle>}
@@ -75,18 +82,14 @@ export function CarouselOfCards({ countryName, happiness }: countryData) {
                   {index === 1 && <p>+15% from expected</p>}
                   {index === 2 && <p>-15% from expected</p>}
                 </CardContent>
-                {index === 0 ? (
+                {index === 0 && (
                   <CardFooter className="mt-auto flex-col gap-2">
-                    <Button
-                      type="submit"
-                      className="w-full"
+                    <CountryProfile
+                      Country={countryName}
                       disabled={!happiness}
-                    >
-                      Profile
-                    </Button>
+                      flash={flash}
+                    />
                   </CardFooter>
-                ) : (
-                  <></>
                 )}
               </Card>
             </div>

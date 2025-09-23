@@ -6,7 +6,7 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import CountryProfile from './CountryProfile';
 
 function titleCase(s: string): string {
   return s
@@ -17,16 +17,23 @@ function titleCase(s: string): string {
 }
 
 type countryData = {
+  flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
   countryStrength: string;
   countryWeakness: string;
 };
 
-export function AllCards({ countryName, happiness }: countryData) {
+export function AllCards({
+  flash = false,
+  countryName,
+  happiness,
+}: countryData) {
   return (
     <div className="w-full flex flex-row justify-center items-center gap-4">
-      <Card className="bg-accent">
+      <Card
+        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+      >
         <CardHeader>
           <CardTitle>Strengths</CardTitle>
         </CardHeader>
@@ -34,7 +41,9 @@ export function AllCards({ countryName, happiness }: countryData) {
           <p>+15% from expected</p>
         </CardContent>
       </Card>
-      <Card className="bg-accent">
+      <Card
+        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+      >
         <CardHeader>
           <CardTitle>Happy Countries</CardTitle>
         </CardHeader>
@@ -62,12 +71,16 @@ export function AllCards({ countryName, happiness }: countryData) {
           )}
         </CardContent>
         <CardFooter className="mt-auto flex-col gap-2">
-          <Button type="submit" className="w-full" disabled={!happiness}>
-            Profile
-          </Button>
+          <CountryProfile
+            Country={countryName}
+            disabled={!happiness}
+            flash={flash}
+          />
         </CardFooter>
       </Card>
-      <Card className="bg-accent">
+      <Card
+        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+      >
         <CardHeader>
           <CardTitle>Weaknesses</CardTitle>
         </CardHeader>

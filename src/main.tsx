@@ -51,12 +51,19 @@ createRoot(document.getElementById('root')!).render(
 // [v] get a piece of paper and a pencil to draw / iterate the ui (use these always)
 // [v] all cards at once for big screens
 // [v] narrower "about" for big screens
-// [_] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
-// [_] finish frontend
+// [v] finish frontend
+// [v] add new cool features to practice all the typescript stuff!
+// [v] host on GH pages
+// [v] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
+// [v] country profile popup
+// [_] make minimal fixes to NDS data science project - fix missing data, add a couple more tables
+// [_] re-export NDS data science project
+// [_] replace accordion with real info
+// [_] add charts (e.g., bar/line/scatter using Recharts or D3), maybe many more cards
 // [_] choropleth the map
-// [_] add new cool features to practice all the typescript stuff!
-// [_] jest/vitest data and components
-// [_] write readme, host on GH pages
+// [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
+// [_] write readme
+// [_] practice typescript by looking up typescript stuff and adding even more features
 
 // --- NDS ---
 

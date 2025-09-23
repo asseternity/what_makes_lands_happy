@@ -17,7 +17,9 @@ function MainContent() {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [countryData, setCountryData] = useState<CountryData | null>(null);
+  const [justChanged, setJustChanged] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (selectedCountry) {
@@ -25,6 +27,16 @@ function MainContent() {
         data.find((d) => d.Country_clean === selectedCountry) || null;
       setCountryData(found);
     }
+
+    setJustChanged(true);
+    window.clearTimeout(timerRef.current ?? undefined);
+    timerRef.current = window.setTimeout(() => {
+      setJustChanged(false);
+    }, 800);
+
+    return () => {
+      window.clearTimeout(timerRef.current ?? undefined);
+    };
   }, [selectedCountry]);
 
   return (
@@ -52,6 +64,7 @@ function MainContent() {
                 setSearchValue('');
               }
             }}
+            className="placeholder:text-white placeholder:opacity-100"
           />
           <Button
             type="button"
@@ -83,6 +96,7 @@ function MainContent() {
       </div>
       <div className="flex flex-col justify-center items-center gap-4 md:hidden">
         <CarouselOfCards
+          flash={justChanged}
           countryName={selectedCountry}
           happiness={countryData?.Happiness}
           countryStrength="Strength"
@@ -110,13 +124,14 @@ function MainContent() {
       <div className="hidden lg:flex flex-row justify-center items-center gap-15">
         <div className="flex-1 max-w-xl">
           <AllCards
+            flash={justChanged}
             countryName={selectedCountry}
             happiness={countryData?.Happiness}
             countryStrength="Strength"
             countryWeakness="Weakness"
           />
         </div>
-        <div className="flex-1 max-w-70">
+        <div className="flex-1 max-w-70 xl:max-w-1/2">
           <h2>About</h2>
           <AccordionFooter />
         </div>
