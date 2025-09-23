@@ -7,32 +7,120 @@ import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
 import { AllCards } from './AllCards';
+import ExpectedLevel from './ExpectedLevelCalculator';
 
 type CountryData = {
+  Country: string;
   Country_clean: string;
+  Region: string;
   Happiness: number;
+  'Median Salary': number | null;
+  'Average Salary': number | null;
+  'Lowest Salary': number | null;
+  'Highest Salary': number | null;
+  'Infant Survival Rate': number | null;
+  'Alcohol Consumption Rate': number | null;
+  'Life Expectancy': number | null;
+  'Netflix (USD/month)': number | null;
+  'Women Safety Index': number | null;
+  'Average Winter Temperature': number | null;
+  'Average Summer Temperature': number | null;
+  Population: number | null;
+  'Energy Per Capita': number | null;
+  '% of Power from Fossil Fuels': number | null;
+  '% of Power from Nuclear': number | null;
+  '% of Power from Renewables': number | null;
+  '% of Agricultural Land': number | null;
+  '% of Forest Land': number | null;
+  Territory: number | null;
+  'Average Rainfall': number | null;
+  Corruption: number | null;
+  'Wheat Production (tonnes)': number | null;
+  'Rye Production (tonnes)': number | null;
+  'Potatoes Production (tonnes)': number | null;
+  'Meat, chicken Production (tonnes)': number | null;
+  'Avocados Production (tonnes)': number | null;
+  'Petrol Price (USD/liter)': number | null;
+  'Daily Oil Consumption (Barrels)': number | null;
+  'CO2 Emissions (ton per capita)': number | null;
 };
 
 function MainContent() {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [countryData, setCountryData] = useState<CountryData | null>(null);
+  const [strength, setStrength] = useState<string | null>();
+  const [weakness, setWeakness] = useState<string | null>();
   const [justChanged, setJustChanged] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (selectedCountry) {
-      const found =
-        data.find((d) => d.Country_clean === selectedCountry) || null;
-      setCountryData(found);
-    }
+    if (!selectedCountry) return;
+
+    const found = data.find((d) => d.Country_clean === selectedCountry) || null;
+    setCountryData(found);
+
+    if (!found) return;
 
     setJustChanged(true);
     window.clearTimeout(timerRef.current ?? undefined);
     timerRef.current = window.setTimeout(() => {
       setJustChanged(false);
     }, 800);
+
+    class MetricData {
+      MetricName: string;
+      ActualValue: number;
+      ExpectedValue: number;
+      Difference: number;
+
+      constructor(
+        metricName: string,
+        actualValue: number,
+        expectedValue: number
+      ) {
+        this.MetricName = metricName;
+        this.ActualValue = actualValue;
+        this.ExpectedValue = expectedValue;
+        this.Difference = this.ActualValue - this.ExpectedValue;
+      }
+    }
+
+    let metrics: MetricData[] = [];
+
+    for (let key in found) {
+      if (found.hasOwnProperty(key)) {
+        const typedKey = key as keyof CountryData;
+        if (typeof found[typedKey] === 'number') {
+          const currentCountryData = {
+            name: found.Country_clean,
+            happiness: found.Happiness,
+            metricName: typedKey,
+            metricValue: found[typedKey]!,
+          };
+          const expectedLevel = ExpectedLevel(data, currentCountryData);
+          metrics.push(
+            new MetricData(typedKey, found[typedKey]!, expectedLevel)
+          );
+        }
+      }
+    }
+
+    if (metrics.length > 0) {
+      const biggestStrength = metrics.reduce((prev, curr) =>
+        curr.Difference > prev.Difference ? curr : prev
+      );
+      setStrength(biggestStrength.MetricName);
+
+      const biggestWeakness = metrics.reduce((prev, curr) =>
+        curr.Difference > prev.Difference ? prev : curr
+      );
+      setWeakness(biggestWeakness.MetricName);
+    } else {
+      setStrength(null);
+      setWeakness(null);
+    }
 
     return () => {
       window.clearTimeout(timerRef.current ?? undefined);
@@ -99,8 +187,8 @@ function MainContent() {
           flash={justChanged}
           countryName={selectedCountry}
           happiness={countryData?.Happiness}
-          countryStrength="Strength"
-          countryWeakness="Weakness"
+          countryStrength={strength}
+          countryWeakness={weakness}
         />
         <div className="px-10 mb-5 w-full flex flex-row justify-center items-center">
           <div className="w-60">
@@ -113,8 +201,8 @@ function MainContent() {
         <CarouselOfCards
           countryName={selectedCountry}
           happiness={countryData?.Happiness}
-          countryStrength="Strength"
-          countryWeakness="Weakness"
+          countryStrength={strength}
+          countryWeakness={weakness}
         />
         <div className="flex-1 max-w-70">
           <h2>About</h2>
@@ -127,8 +215,8 @@ function MainContent() {
             flash={justChanged}
             countryName={selectedCountry}
             happiness={countryData?.Happiness}
-            countryStrength="Strength"
-            countryWeakness="Weakness"
+            countryStrength={strength}
+            countryWeakness={weakness}
           />
         </div>
         <div className="flex-1 max-w-70 xl:max-w-1/2">

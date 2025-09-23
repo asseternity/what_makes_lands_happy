@@ -56,11 +56,19 @@ createRoot(document.getElementById('root')!).render(
 // [v] host on GH pages
 // [v] now just USE TypeScript stuff to get handy with it! make the UI in typescript until it's good
 // [v] country profile popup
-// [_] make minimal fixes to NDS data science project - fix missing data, add a couple more tables
-// [_] re-export NDS data science project
-// [_] replace accordion with real info
+// [v] ui feedback
+// [v] use this for UI colors: https://coolors.co/palettes/trending !!!
+// [v] make minimal fixes to NDS data science project - fix missing data, add a couple more tables
+// [v] re-export NDS data science project
+// [v] *** do the expected weights calculations HERE - in TS!!! ***
+// [v] show numbers in cards and profiles
+// [v] improve uis
+// [v] replace accordion with real info
+// [_] make the strength / weaknesses WEIGHTED by how much it affects happiness!
+// [_] replace numbers with bars
 // [_] add charts (e.g., bar/line/scatter using Recharts or D3), maybe many more cards
 // [_] choropleth the map
+// [_] add sources to kaggle data
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
 // [_] write readme
 // [_] practice typescript by looking up typescript stuff and adding even more features

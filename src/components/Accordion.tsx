@@ -17,41 +17,40 @@ export function AccordionFooter() {
         <AccordionTrigger>What is this project?</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            Every place hums with its own rhythm—some promise opportunity,
-            others serenity, some quietly drain the soul.
-          </p>
-          <p>
-            The art lies in discerning what truly matters when choosing where to
-            root yourself.
+            A data-driven explorer of national wellbeing. It combines public
+            datasets to show what correlates with and drives a country’s
+            happiness score. Each country page highlights its biggest positive
+            and negative outliers.
           </p>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
-        <AccordionTrigger>Shipping Details</AccordionTrigger>
+        <AccordionTrigger>How to read the map</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            We offer worldwide shipping through trusted courier partners.
-            Standard delivery takes 3-5 business days, while express shipping
-            ensures delivery within 1-2 business days.
-          </p>
-          <p>
-            All orders are carefully packaged and fully insured. Track your
-            shipment in real-time through our dedicated tracking portal.
+            Colors show the official happiness score. Hover to see top metrics.
+            Click a country to open its profile with charts and outlier cards.
           </p>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
-        <AccordionTrigger>Return Policy</AccordionTrigger>
+        <AccordionTrigger>Country profile</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            We stand behind our products with a comprehensive 30-day return
-            policy. If you&apos;re not completely satisfied, simply return the
-            item in its original condition.
+            Each profile shows three biggest strengths and three biggest
+            weaknesses. Strengths are metrics where the country scores far above
+            its expected value. Weaknesses are metrics where it scores far below
+            expectations.
           </p>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>Data sources</AccordionTrigger>
+        <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            Our hassle-free return process includes free return shipping and
-            full refunds processed within 48 hours of receiving the returned
-            item.
+            Data comes from public sources and curated datasets. Every country
+            detail page links to the original source files and the year used.
+            Source names, file names, and extraction dates can be found here.
           </p>
         </AccordionContent>
       </AccordionItem>

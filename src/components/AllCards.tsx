@@ -20,14 +20,16 @@ type countryData = {
   flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
-  countryStrength: string;
-  countryWeakness: string;
+  countryStrength: string | undefined | null;
+  countryWeakness: string | undefined | null;
 };
 
 export function AllCards({
   flash = false,
   countryName,
   happiness,
+  countryStrength,
+  countryWeakness,
 }: countryData) {
   return (
     <div className="w-full flex flex-row justify-center items-center gap-4">
@@ -35,7 +37,7 @@ export function AllCards({
         className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
       >
         <CardHeader>
-          <CardTitle>Strengths</CardTitle>
+          <CardTitle>{countryStrength}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
           <p>+15% from expected</p>
@@ -82,7 +84,7 @@ export function AllCards({
         className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
       >
         <CardHeader>
-          <CardTitle>Weaknesses</CardTitle>
+          <CardTitle>{countryWeakness}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
           <p>-15% from expected</p>

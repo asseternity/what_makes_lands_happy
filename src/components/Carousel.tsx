@@ -27,14 +27,16 @@ type countryData = {
   flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
-  countryStrength: string;
-  countryWeakness: string;
+  countryStrength: string | undefined | null;
+  countryWeakness: string | undefined | null;
 };
 
 export function CarouselOfCards({
   flash = false,
   countryName,
   happiness,
+  countryStrength,
+  countryWeakness,
 }: countryData) {
   return (
     <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
@@ -47,8 +49,8 @@ export function CarouselOfCards({
               >
                 <CardHeader>
                   {index === 0 && <CardTitle>Happy Countries</CardTitle>}
-                  {index === 1 && <CardTitle>Strengths</CardTitle>}
-                  {index === 2 && <CardTitle>Weaknesses</CardTitle>}
+                  {index === 1 && <CardTitle>{countryStrength}</CardTitle>}
+                  {index === 2 && <CardTitle>{countryWeakness}</CardTitle>}
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
                   {index === 0 ? (
