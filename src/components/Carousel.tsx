@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/carousel';
 import { Progress } from '@/components/ui/progress';
 import CountryProfile from './CountryProfile';
+import OutlierData from './Outlier';
 
 function titleCase(s: string): string {
   return s
@@ -27,8 +28,8 @@ type countryData = {
   flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
-  countryStrength: string | undefined | null;
-  countryWeakness: string | undefined | null;
+  countryStrength: OutlierData | undefined | null;
+  countryWeakness: OutlierData | undefined | null;
 };
 
 export function CarouselOfCards({
@@ -49,8 +50,12 @@ export function CarouselOfCards({
               >
                 <CardHeader>
                   {index === 0 && <CardTitle>Happy Countries</CardTitle>}
-                  {index === 1 && <CardTitle>{countryStrength}</CardTitle>}
-                  {index === 2 && <CardTitle>{countryWeakness}</CardTitle>}
+                  {index === 1 && (
+                    <CardTitle>{countryStrength?.MetricName}</CardTitle>
+                  )}
+                  {index === 2 && (
+                    <CardTitle>{countryWeakness?.MetricName}</CardTitle>
+                  )}
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
                   {index === 0 ? (
@@ -81,8 +86,12 @@ export function CarouselOfCards({
                   ) : (
                     <></>
                   )}
-                  {index === 1 && <p>+15% from expected</p>}
-                  {index === 2 && <p>-15% from expected</p>}
+                  {index === 1 && (
+                    <p>{countryStrength?.DisplayPercent}% from expected</p>
+                  )}
+                  {index === 2 && (
+                    <p>{countryWeakness?.DisplayPercent}% from expected</p>
+                  )}
                 </CardContent>
                 {index === 0 && (
                   <CardFooter className="mt-auto flex-col gap-2">

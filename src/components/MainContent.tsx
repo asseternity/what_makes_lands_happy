@@ -1,56 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '/world-map-svgrepo-com.svg';
 import data from '../dummy/happiness_df.json';
+import weightData from '../dummy/happiness_corr.json';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
 import { AllCards } from './AllCards';
-import ExpectedLevel from './ExpectedLevelCalculator';
-
-type CountryData = {
-  Country: string;
-  Country_clean: string;
-  Region: string;
-  Happiness: number;
-  'Median Salary': number | null;
-  'Average Salary': number | null;
-  'Lowest Salary': number | null;
-  'Highest Salary': number | null;
-  'Infant Survival Rate': number | null;
-  'Alcohol Consumption Rate': number | null;
-  'Life Expectancy': number | null;
-  'Netflix (USD/month)': number | null;
-  'Women Safety Index': number | null;
-  'Average Winter Temperature': number | null;
-  'Average Summer Temperature': number | null;
-  Population: number | null;
-  'Energy Per Capita': number | null;
-  '% of Power from Fossil Fuels': number | null;
-  '% of Power from Nuclear': number | null;
-  '% of Power from Renewables': number | null;
-  '% of Agricultural Land': number | null;
-  '% of Forest Land': number | null;
-  Territory: number | null;
-  'Average Rainfall': number | null;
-  Corruption: number | null;
-  'Wheat Production (tonnes)': number | null;
-  'Rye Production (tonnes)': number | null;
-  'Potatoes Production (tonnes)': number | null;
-  'Meat, chicken Production (tonnes)': number | null;
-  'Avocados Production (tonnes)': number | null;
-  'Petrol Price (USD/liter)': number | null;
-  'Daily Oil Consumption (Barrels)': number | null;
-  'CO2 Emissions (ton per capita)': number | null;
-};
+import {
+  expectedLevel,
+  normalizeValue,
+  getMetricRange,
+} from './ExpectedLevelCalculator';
+import type { CountryStats } from './ExpectedLevelCalculator';
+import MetricData from './MetricData';
+import OutlierData from './Outlier';
 
 function MainContent() {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
-  const [countryData, setCountryData] = useState<CountryData | null>(null);
-  const [strength, setStrength] = useState<string | null>();
-  const [weakness, setWeakness] = useState<string | null>();
+  const [countryData, setCountryData] = useState<CountryStats | null>(null);
+  const [strength, setStrength] = useState<OutlierData | null>();
+  const [weakness, setWeakness] = useState<OutlierData | null>();
   const [justChanged, setJustChanged] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<number | null>(null);
@@ -69,54 +41,82 @@ function MainContent() {
       setJustChanged(false);
     }, 800);
 
-    class MetricData {
-      MetricName: string;
-      ActualValue: number;
-      ExpectedValue: number;
-      Difference: number;
+    let metrics: MetricData[] = [];
 
-      constructor(
-        metricName: string,
-        actualValue: number,
-        expectedValue: number
-      ) {
-        this.MetricName = metricName;
-        this.ActualValue = actualValue;
-        this.ExpectedValue = expectedValue;
-        this.Difference = this.ActualValue - this.ExpectedValue;
+    // iterate over object keys to get actual metrics vs expected metrics
+    // gather ranges for normalization once
+    const metricRanges: Record<string, { min: number; max: number }> = {};
+    for (const key in found) {
+      const typedKey = key as keyof CountryStats;
+      if (typeof found[typedKey] === 'number') {
+        metricRanges[typedKey] = getMetricRange(data, typedKey);
       }
     }
 
-    let metrics: MetricData[] = [];
-
     for (let key in found) {
       if (found.hasOwnProperty(key)) {
-        const typedKey = key as keyof CountryData;
-        if (typeof found[typedKey] === 'number') {
-          const currentCountryData = {
-            name: found.Country_clean,
-            happiness: found.Happiness,
-            metricName: typedKey,
-            metricValue: found[typedKey]!,
-          };
-          const expectedLevel = ExpectedLevel(data, currentCountryData);
-          metrics.push(
-            new MetricData(typedKey, found[typedKey]!, expectedLevel)
-          );
+        const typedKey = key as keyof CountryStats;
+        const val = found[typedKey];
+        if (typeof val === 'number' && !isNaN(val)) {
+          const range = metricRanges[typedKey];
+          const actualNorm = normalizeValue(val, range.min, range.max);
+          const expectedNorm = expectedLevel(data, found.Happiness, typedKey);
+          metrics.push(new MetricData(typedKey, actualNorm, expectedNorm));
         }
       }
     }
 
-    if (metrics.length > 0) {
-      const biggestStrength = metrics.reduce((prev, curr) =>
-        curr.Difference > prev.Difference ? curr : prev
-      );
-      setStrength(biggestStrength.MetricName);
+    // assign weights to metrics
+    type MetricWeightData = {
+      metric: string;
+      weight_signed?: number;
+      weight_magnitude?: number;
+      weight?: number; // optional fallback for older files
+    };
+    type MetricWeightArray = MetricWeightData[];
+    const weight: MetricWeightArray = weightData as MetricWeightArray;
 
-      const biggestWeakness = metrics.reduce((prev, curr) =>
-        curr.Difference > prev.Difference ? prev : curr
+    for (let i = 0; i < metrics.length; i++) {
+      for (let j = 0; j < weight.length; j++) {
+        if (metrics[i].MetricName === weight[j].metric) {
+          // prefer explicit signed/magnitude fields, fallback to 'weight' if present
+          const signed = weight[j].weight_signed ?? weight[j].weight ?? 0;
+          const magnitude =
+            weight[j].weight_magnitude ?? Math.abs(weight[j].weight ?? signed);
+          metrics[i].Weight = signed;
+          metrics[i].WeightMagnitude = magnitude;
+          break;
+        }
+      }
+    }
+
+    // find outlier metrics
+    if (metrics.length > 0) {
+      const strongest = metrics.reduce((best, cur) =>
+        cur.WeightedDifference > best.WeightedDifference ? cur : best
       );
-      setWeakness(biggestWeakness.MetricName);
+      setStrength(
+        new OutlierData(
+          true,
+          false,
+          strongest.MetricName,
+          Math.round(strongest.PercentAwayFromExpected * 10) / 10, // display rounded
+          strongest.WeightedDifference
+        )
+      );
+
+      const weakest = metrics.reduce((worst, cur) =>
+        cur.WeightedDifference < worst.WeightedDifference ? cur : worst
+      );
+      setWeakness(
+        new OutlierData(
+          false,
+          true,
+          weakest.MetricName,
+          Math.round(weakest.PercentAwayFromExpected * 10) / 10,
+          weakest.WeightedDifference
+        )
+      );
     } else {
       setStrength(null);
       setWeakness(null);
@@ -180,6 +180,7 @@ function MainContent() {
         <WorldMap
           mapContainerRef={mapContainerRef}
           callback={setSelectedCountry}
+          countryStats={data}
         />
       </div>
       <div className="flex flex-col justify-center items-center gap-4 md:hidden">

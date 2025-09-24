@@ -64,14 +64,15 @@ createRoot(document.getElementById('root')!).render(
 // [v] show numbers in cards and profiles
 // [v] improve uis
 // [v] replace accordion with real info
-// [_] make the strength / weaknesses WEIGHTED by how much it affects happiness!
-// [_] replace numbers with bars
-// [_] add charts (e.g., bar/line/scatter using Recharts or D3), maybe many more cards
-// [_] choropleth the map
+// [v] practice typescript by looking up typescript stuff and adding even more features
+// [v] make the strength / weaknesses WEIGHTED by how much it affects happiness!
+// [v] choropleth the map with happiness numbers
+// [_] write readme
+// [_] replace "strength" and "weakness" in cards and profile with CLEAR charts:
+// - explaining the methodology (CLARITY)
+// - showing the ourliers for the country (DATA SCIENCE)
 // [_] add sources to kaggle data
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
-// [_] write readme
-// [_] practice typescript by looking up typescript stuff and adding even more features
 
 // --- NDS ---
 

@@ -1,69 +1,28 @@
-# React + TypeScript + Vite
+# Happiness Report
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application that visualizes global happiness rankings and the factors influencing them. The app highlights strengths and weaknesses of countries relative to expected levels of happiness using interactive maps and dynamic charts.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Global Happiness Map:** Interactive world map colored from green (high happiness) to red (low happiness) based on country happiness scores.
+- **Outlier Analysis:** Highlights the biggest strengths and weaknesses of a selected country relative to its expected happiness level.
+- **Normalized Metrics:** Metrics are normalized and weighted based on correlation with happiness to provide meaningful comparisons.
+- **Searchable Countries:** Quickly find any country using the search bar.
+- **Responsive UI:** Works across mobile, tablet, and desktop screens with dynamic card carousels.
+- **Detailed Metric Insights:** Shows metric-level contributions to happiness, including salaries, life expectancy, safety, and environmental factors.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **Map Visualization:** MapLibre GL JS
+- **Data Handling:** JSON, TypeScript classes for metrics and outliers
+- **Charts & Components:** Custom carousels and accordion components
+- **Build Tool:** Vite
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+## Check it out here: https://asseternity.github.io/what_makes_lands_happy/

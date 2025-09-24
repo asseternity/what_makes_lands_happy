@@ -36,59 +36,44 @@ type CountryStats = {
 
 type CountryStatsArray = CountryStats[];
 
-type CountryData = {
-  name: string;
-  happiness: number;
-  metricName: string;
-  metricValue: number;
-};
+const EPS = 1e-6;
 
-export default function ExpectedLevel(
-  data: CountryStatsArray,
-  countryData: CountryData
-): number {
-  // set up vars and their types
-  let targetCountryName: string | null = countryData.name;
-  let targetCountryHappiness: number | null = countryData.happiness;
-  let targetMetricName: string | null = countryData.metricName;
-  let targetMetricValue: number | null = countryData.metricValue;
-
-  // grab the whole json, find the best and last happiest country
-  let happiestCountry = data.reduce((prev, curr) =>
-    curr.Happiness > prev.Happiness ? curr : prev
-  );
-  let highestHappiness: number = happiestCountry.Happiness;
-  let saddestCountry = data.reduce((prev, curr) =>
-    curr.Happiness > prev.Happiness ? prev : curr
-  );
-  let lowestHappiness: number = saddestCountry.Happiness;
-
-  // grab the highest and lowest values for the metric
-  let bestMetricCountry = data.reduce((prev, curr) =>
-    (curr as any)[targetMetricName] > (prev as any)[targetMetricName]
-      ? curr
-      : prev
-  );
-  let highestMetric: number = (bestMetricCountry as any)[targetMetricName];
-  let worstMetricCountry = data.reduce((prev, curr) =>
-    (curr as any)[targetMetricName] > (prev as any)[targetMetricName]
-      ? prev
-      : curr
-  );
-  let lowestMetric: number = (worstMetricCountry as any)[targetMetricName];
-
-  // considering our happiness (1) rank and (2) numerical median / mean / weighted / average value, what is the EXPECTED metric
-  // how far are we off? (1) by rank, (2) by  numerical median / mean / weighted / average value
-  // basically it's a question of: (1) what total rank of happiness are we, and (2) how for up or down is this metric?
-
-  // normalize happiness to 0–1
-  let happinessRatio =
-    (targetCountryHappiness - lowestHappiness) /
-    (highestHappiness - lowestHappiness);
-
-  // expected metric by interpolation
-  let expectedMetric =
-    lowestMetric + happinessRatio * (highestMetric - lowestMetric);
-
-  return expectedMetric;
+function getMetricRange(data: CountryStatsArray, metric: keyof CountryStats) {
+  const vals = data
+    .map((d) => d[metric] as number | null)
+    .filter((v): v is number => typeof v === 'number' && !isNaN(v));
+  if (vals.length === 0) return { min: 0, max: 0 };
+  return { min: Math.min(...vals), max: Math.max(...vals) };
 }
+
+function normalizeValue(value: number, min: number, max: number) {
+  if (max - min < EPS) return 0.5; // fallback when no spread
+  return (value - min) / (max - min);
+}
+
+function happinessRatioFor(data: CountryStatsArray, countryHappiness: number) {
+  const hs = data.map((d) => d.Happiness).filter((v) => !isNaN(v));
+  const hMin = Math.min(...hs);
+  const hMax = Math.max(...hs);
+  if (hMax - hMin < EPS) return 0.5;
+  return (countryHappiness - hMin) / (hMax - hMin);
+}
+
+function expectedLevel(
+  data: CountryStatsArray,
+  happiness: number,
+  metricName: string
+): number {
+  const targetMetric = metricName as keyof CountryStats;
+  const ratio = happinessRatioFor(data, happiness);
+  return ratio;
+}
+
+export {
+  EPS,
+  expectedLevel,
+  normalizeValue,
+  happinessRatioFor,
+  getMetricRange,
+};
+export type { CountryStats };

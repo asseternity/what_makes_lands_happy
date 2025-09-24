@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import CountryProfile from './CountryProfile';
+import OutlierData from './Outlier';
 
 function titleCase(s: string): string {
   return s
@@ -20,8 +21,8 @@ type countryData = {
   flash?: boolean;
   countryName: string;
   happiness: number | undefined | null;
-  countryStrength: string | undefined | null;
-  countryWeakness: string | undefined | null;
+  countryStrength: OutlierData | undefined | null;
+  countryWeakness: OutlierData | undefined | null;
 };
 
 export function AllCards({
@@ -37,10 +38,10 @@ export function AllCards({
         className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
       >
         <CardHeader>
-          <CardTitle>{countryStrength}</CardTitle>
+          <CardTitle>{countryStrength?.MetricName}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
-          <p>+15% from expected</p>
+          <p>{countryStrength?.DisplayPercent}% from expected</p>
         </CardContent>
       </Card>
       <Card
@@ -84,10 +85,10 @@ export function AllCards({
         className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
       >
         <CardHeader>
-          <CardTitle>{countryWeakness}</CardTitle>
+          <CardTitle>{countryWeakness?.MetricName}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
-          <p>-15% from expected</p>
+          <p>{countryWeakness?.DisplayPercent}% from expected</p>
         </CardContent>
       </Card>
     </div>
