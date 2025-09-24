@@ -1,22 +1,43 @@
+// WorldMap.tsx (fixed coloring & robust name mapping)
+
 import { useRef, useEffect } from 'react';
 import maplibregl, { Map } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import country_aliases from './CountryAliases';
+
+function titleCase(s: string): string {
+  return s
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 function happinessToColor(h: number): string {
   if (h >= 7.5) return '#006400'; // dark green
+  if (h >= 7.25) return '#0A8C0A';
   if (h >= 7.0) return '#228B22';
+  if (h >= 6.75) return '#2E8B57';
   if (h >= 6.5) return '#32CD32';
-  if (h >= 6.0) return '#7CFC00';
-  if (h >= 5.5) return '#ADFF2F';
-  if (h >= 5.0) return '#FFFF00';
-  if (h >= 4.5) return '#FFD700';
-  if (h >= 4.0) return '#FFA500';
-  if (h >= 3.5) return '#FF8C00';
-  if (h >= 3.0) return '#FF4500';
-  if (h >= 2.5) return '#FF0000';
-  if (h >= 2.0) return '#B22222';
-  if (h >= 1.5) return '#8B0000';
-  return '#4B0000'; // worst 0–1.5
+  if (h >= 6.25) return '#7CFC00';
+  if (h >= 6.0) return '#ADFF2F';
+  if (h >= 5.75) return '#DFFF00';
+  if (h >= 5.5) return '#FFFF00';
+  if (h >= 5.25) return '#FFEF00';
+  if (h >= 5.0) return '#FFD700';
+  if (h >= 4.75) return '#FFA500';
+  if (h >= 4.5) return '#FF8C00';
+  if (h >= 4.25) return '#FF7F50';
+  if (h >= 4.0) return '#FF6347';
+  if (h >= 3.75) return '#FF4500';
+  if (h >= 3.5) return '#FF0000';
+  if (h >= 3.25) return '#DC143C';
+  if (h >= 3.0) return '#B22222';
+  if (h >= 2.75) return '#A52A2A';
+  if (h >= 2.5) return '#8B0000';
+  if (h >= 2.25) return '#800000';
+  if (h >= 1.5) return '#4B0000'; // dark red
+  return '#4B0000'; // covers 0–1.5
 }
 
 class SimpleZoomControl implements maplibregl.IControl {
@@ -76,10 +97,23 @@ class SimpleZoomControl implements maplibregl.IControl {
 type WorldMapProps = {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
   callback: Function;
-  // Provide your dataset here or import it above.
-  // Expected shape: [{ Country: "India", Country_clean: "india", Happiness: 4.05 }, ...]
-  countryStats?: Array<{ Country: string; Happiness: number }>;
+  countryStats?: Array<{
+    Country: string;
+    Country_clean: string;
+    Happiness: number;
+  }>;
 };
+
+function normalizeKey(s?: string) {
+  if (!s) return '';
+  return s
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 export default function WorldMap({
   mapContainerRef,
@@ -87,6 +121,7 @@ export default function WorldMap({
   countryStats = [],
 }: WorldMapProps) {
   const mapRef = useRef<Map | null>(null);
+  const paintedLayerIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -101,55 +136,92 @@ export default function WorldMap({
 
     mapRef.current.addControl(new SimpleZoomControl());
 
-    // Build quick lookup from provided stats
-    const statsByName: Record<string, number> = {};
-    let minH = Infinity;
-    let maxH = -Infinity;
+    // canonical -> happiness (use Country_clean as canonical key)
+    const canonicalHappiness: Record<string, number> = {};
+    // displayName -> canonical (many-to-one)
+    const displayToCanonical: Record<string, string> = {};
+    // normalized displayName -> canonical (for clicks)
+    const normalizedToCanonical: Record<string, string> = {};
+
     for (const s of countryStats) {
-      if (s?.Country && typeof s.Happiness === 'number') {
-        statsByName[s.Country] = s.Happiness;
-        if (s.Happiness < minH) minH = s.Happiness;
-        if (s.Happiness > maxH) maxH = s.Happiness;
+      if (s?.Country_clean && typeof s.Happiness === 'number') {
+        const canonical = s.Country_clean;
+        canonicalHappiness[canonical] = s.Happiness;
+
+        // prefer the provided display Country (exact) if available
+        if (s.Country && typeof s.Country === 'string') {
+          displayToCanonical[s.Country] = canonical;
+          normalizedToCanonical[normalizeKey(s.Country)] = canonical;
+        }
+
+        // also add a titleCased variant of Country_clean as a display option
+        const tc = titleCase(s.Country_clean);
+        if (!displayToCanonical[tc]) {
+          displayToCanonical[tc] = canonical;
+          normalizedToCanonical[normalizeKey(tc)] = canonical;
+        }
       }
     }
-    if (!isFinite(minH)) {
-      // safe defaults if no data provided
-      minH = 0;
-      maxH = 10;
-    }
 
-    // on map load set up paint expression for countries-fill
-    mapRef.current.on('load', () => {
-      // Build match expression: ['match', ['get','NAME'], 'India', '#hex', 'Egypt', '#hex', ..., defaultColor]
-      const matchExpr: any[] = ['match', ['get', 'NAME']];
+    // add aliases (alias -> canonical name)
+    Object.entries(country_aliases).forEach(([alias, canon]) => {
+      if (canonicalHappiness[canon] !== undefined) {
+        const displayAliasTitle = titleCase(alias);
+        // title-case and raw-lowercase variants
+        displayToCanonical[displayAliasTitle] = canon;
+        displayToCanonical[alias] = canon; // raw alias (lowercase)
+        normalizedToCanonical[normalizeKey(displayAliasTitle)] = canon;
+        normalizedToCanonical[normalizeKey(alias)] = canon;
+      }
+    });
 
-      // For each known country compute green shade. Brighter green = higher Happiness.
-      // We'll use HSL hue 120 (green). Map happiness to lightness 70 -> 30 (higher happiness -> darker, richer green).
-      // Adjust as needed.
+    // on load: build and apply match expression only for display names that map to a known happiness
+    mapRef.current!.on('load', () => {
+      // use coalesce to pick the most likely name property, then downcase it
+      const nameExpr: any[] = [
+        'downcase',
+        [
+          'coalesce',
+          ['get', 'NAME'],
+          ['get', 'ADMIN'],
+          ['get', 'NAME_EN'],
+          ['get', 'BRK_NAME'],
+        ],
+      ];
+
+      // build match expression against the downcased name
+      const matchExpr: any[] = ['match', nameExpr];
       const defaultGrey = '#d9d9d9';
-      for (const countryName of Object.keys(statsByName)) {
-        const hval = statsByName[countryName];
-        const hex = happinessToColor(hval); // use your new function
-        matchExpr.push(countryName, hex);
+
+      // push each display name -> color, but use LOWERCASED display keys
+      const seenKeys = new Set<string>();
+      for (const [display, canon] of Object.entries(displayToCanonical)) {
+        const h = canonicalHappiness[canon];
+        if (typeof h === 'number' && !isNaN(h)) {
+          const key = display.toLowerCase();
+          if (!seenKeys.has(key)) {
+            matchExpr.push(key, happinessToColor(h));
+            seenKeys.add(key);
+          }
+        }
       }
 
       matchExpr.push(defaultGrey);
 
-      // Ensure the layer id exists. The example style likely has 'countries-fill'.
-      const layerId = 'countries-fill';
-      const layerExists = mapRef.current?.getLayer(layerId);
-
+      // pick the layer we will paint (same logic as before)
+      const preferredId = 'countries-fill';
+      const layerExists = mapRef.current?.getLayer(preferredId);
       if (layerExists) {
-        mapRef.current?.setPaintProperty(layerId, 'fill-color', matchExpr);
-        // Optional: set fill-opacity or outline
-        mapRef.current?.setPaintProperty(layerId, 'fill-opacity', 1);
+        paintedLayerIdRef.current = preferredId;
+        mapRef.current!.setPaintProperty(preferredId, 'fill-color', matchExpr);
+        mapRef.current!.setPaintProperty(preferredId, 'fill-opacity', 1);
       } else {
-        // If layer id differs you can iterate style layers and pick the first polygon layer that contains 'country' in the id/name.
         const layers = mapRef.current!.getStyle().layers || [];
         const candidate = layers.find((l: any) =>
-          /country|countries|admin/.test(l.id)
+          /country|countries|admin|ne_10m_admin_0_countries/i.test(l.id)
         );
         if (candidate) {
+          paintedLayerIdRef.current = candidate.id;
           mapRef.current!.setPaintProperty(
             candidate.id,
             'fill-color',
@@ -160,21 +232,37 @@ export default function WorldMap({
       }
     });
 
+    // click: query the exact painted layer and return canonical if possible
     mapRef.current?.on('click', (e) => {
+      const layerToQuery = paintedLayerIdRef.current ?? 'countries-fill';
       const features = mapRef.current?.queryRenderedFeatures(e.point, {
-        layers: ['countries-fill'],
+        layers: [layerToQuery],
       });
 
       if (features?.length) {
-        const country = features[0];
-        const cleanCountryName: string = country.properties?.NAME.toLowerCase();
-        callback(cleanCountryName);
+        const countryFeature = features[0];
+        const rawName: string =
+          countryFeature.properties?.NAME ||
+          countryFeature.properties?.name ||
+          '';
+        const normalized = normalizeKey(rawName);
+
+        const canonical =
+          normalizedToCanonical[normalized] ??
+          // try title-case variant fallbacks:
+          normalizedToCanonical[normalizeKey(titleCase(rawName))];
+
+        console.warn(`Raw name: "${rawName}" (normalized: "${normalized}")`);
+
+        // If canonical found, send Country_clean; else send normalized raw name
+        callback(canonical ?? normalized);
       }
     });
 
     return () => {
       mapRef.current?.remove();
       mapRef.current = null;
+      paintedLayerIdRef.current = null;
     };
   }, [countryStats]);
 

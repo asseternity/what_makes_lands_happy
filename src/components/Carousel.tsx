@@ -87,10 +87,22 @@ export function CarouselOfCards({
                     <></>
                   )}
                   {index === 1 && (
-                    <p>{countryStrength?.DisplayPercent}% from expected</p>
+                    <div>
+                      {countryStrength ? (
+                        <p>{countryStrength?.DisplayPercent}% from expected</p>
+                      ) : (
+                        <p>No data</p>
+                      )}
+                    </div>
                   )}
                   {index === 2 && (
-                    <p>{countryWeakness?.DisplayPercent}% from expected</p>
+                    <div>
+                      {countryWeakness ? (
+                        <p>{countryWeakness?.DisplayPercent}% from expected</p>
+                      ) : (
+                        <p>No data</p>
+                      )}
+                    </div>
                   )}
                 </CardContent>
                 {index === 0 && (

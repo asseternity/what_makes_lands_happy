@@ -41,7 +41,11 @@ export function AllCards({
           <CardTitle>{countryStrength?.MetricName}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
-          <p>{countryStrength?.DisplayPercent}% from expected</p>
+          {countryStrength ? (
+            <p>{countryStrength?.DisplayPercent}% from expected</p>
+          ) : (
+            <p>No data</p>
+          )}
         </CardContent>
       </Card>
       <Card
@@ -88,7 +92,11 @@ export function AllCards({
           <CardTitle>{countryWeakness?.MetricName}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
-          <p>{countryWeakness?.DisplayPercent}% from expected</p>
+          {countryWeakness ? (
+            <p>{countryWeakness?.DisplayPercent}% from expected</p>
+          ) : (
+            <p>No data</p>
+          )}
         </CardContent>
       </Card>
     </div>

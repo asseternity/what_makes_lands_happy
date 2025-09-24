@@ -39,7 +39,7 @@ function MainContent() {
     window.clearTimeout(timerRef.current ?? undefined);
     timerRef.current = window.setTimeout(() => {
       setJustChanged(false);
-    }, 800);
+    }, 400);
 
     let metrics: MetricData[] = [];
 

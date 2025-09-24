@@ -71,12 +71,13 @@ createRoot(document.getElementById('root')!).render(
 // [_] replace "strength" and "weakness" in cards and profile with CLEAR charts:
 // - explaining the methodology (CLARITY)
 // - showing the ourliers for the country (DATA SCIENCE)
-// [_] add sources to kaggle data
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
 
 // --- NDS ---
 
+// [_] add turkey and US
 // [_] finish NDS data science project
+// [_] add sources
 // [_] publish NDS
 
 // --- DOTNET ---
