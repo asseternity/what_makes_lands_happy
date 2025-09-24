@@ -67,7 +67,7 @@ createRoot(document.getElementById('root')!).render(
 // [v] practice typescript by looking up typescript stuff and adding even more features
 // [v] make the strength / weaknesses WEIGHTED by how much it affects happiness!
 // [v] choropleth the map with happiness numbers
-// [_] write readme
+// [v] write readme
 // [_] replace "strength" and "weakness" in cards and profile with CLEAR charts:
 // - explaining the methodology (CLARITY)
 // - showing the ourliers for the country (DATA SCIENCE)
