@@ -61,10 +61,10 @@ function happinessRatioFor(data: CountryStatsArray, countryHappiness: number) {
 
 function expectedLevel(
   data: CountryStatsArray,
-  happiness: number,
-  metricName: string
+  happiness: number
+  // metricName: string
 ): number {
-  const targetMetric = metricName as keyof CountryStats;
+  // const targetMetric = metricName as keyof CountryStats;
   const ratio = happinessRatioFor(data, happiness);
   return ratio;
 }

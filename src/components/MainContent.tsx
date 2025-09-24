@@ -60,7 +60,8 @@ function MainContent() {
         if (typeof val === 'number' && !isNaN(val)) {
           const range = metricRanges[typedKey];
           const actualNorm = normalizeValue(val, range.min, range.max);
-          const expectedNorm = expectedLevel(data, found.Happiness, typedKey);
+          // const expectedNorm = expectedLevel(data, found.Happiness, typedKey);
+          const expectedNorm = expectedLevel(data, found.Happiness);
           metrics.push(new MetricData(typedKey, actualNorm, expectedNorm));
         }
       }
