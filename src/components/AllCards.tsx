@@ -35,7 +35,7 @@ export function AllCards({
   return (
     <div className="w-full flex flex-row justify-center items-center gap-4">
       <Card
-        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+        className={`bg-accent transition-transform-colors-opacity duration-300 ${flash ? 'scale-90 bg-primary' : ''} ${countryStrength ? '' : 'opacity-0'}`}
       >
         <CardHeader>
           <CardTitle>{countryStrength?.MetricName}</CardTitle>
@@ -86,7 +86,7 @@ export function AllCards({
         </CardFooter>
       </Card>
       <Card
-        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+        className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''} ${countryStrength ? '' : 'opacity-0'}`}
       >
         <CardHeader>
           <CardTitle>{countryWeakness?.MetricName}</CardTitle>

@@ -68,6 +68,7 @@ createRoot(document.getElementById('root')!).render(
 // [v] make the strength / weaknesses WEIGHTED by how much it affects happiness!
 // [v] choropleth the map with happiness numbers
 // [v] write readme
+// [v] animations for N/A countries too
 // [_] replace "strength" and "weakness" in cards and profile with CLEAR charts:
 // - explaining the methodology (CLARITY)
 // - showing the ourliers for the country (DATA SCIENCE)

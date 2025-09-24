@@ -230,17 +230,26 @@ export default function WorldMap({
           mapRef.current!.setPaintProperty(candidate.id, 'fill-opacity', 1);
         }
       }
+
+      mapRef.current?.setPaintProperty('crimea-fill', 'fill-color', '#FFA500');
     });
 
     // click: query the exact painted layer and return canonical if possible
     mapRef.current?.on('click', (e) => {
-      const layerToQuery = paintedLayerIdRef.current ?? 'countries-fill';
       const features = mapRef.current?.queryRenderedFeatures(e.point, {
+        layers: ['crimea-fill'],
+      });
+
+      // If the click is on the 'crimea-fill' layer, ignore it
+      if (features?.length) return;
+
+      const layerToQuery = paintedLayerIdRef.current ?? 'countries-fill';
+      const countryFeatures = mapRef.current?.queryRenderedFeatures(e.point, {
         layers: [layerToQuery],
       });
 
-      if (features?.length) {
-        const countryFeature = features[0];
+      if (countryFeatures?.length) {
+        const countryFeature = countryFeatures[0];
         const rawName: string =
           countryFeature.properties?.NAME ||
           countryFeature.properties?.name ||
@@ -249,12 +258,8 @@ export default function WorldMap({
 
         const canonical =
           normalizedToCanonical[normalized] ??
-          // try title-case variant fallbacks:
           normalizedToCanonical[normalizeKey(titleCase(rawName))];
 
-        console.warn(`Raw name: "${rawName}" (normalized: "${normalized}")`);
-
-        // If canonical found, send Country_clean; else send normalized raw name
         callback(canonical ?? normalized);
       }
     });

@@ -39,10 +39,12 @@ export function CarouselOfCards({
   countryStrength,
   countryWeakness,
 }: countryData) {
+  const slideNumber = countryStrength ? 3 : 1;
+
   return (
     <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
       <CarouselContent>
-        {Array.from({ length: 3 }).map((_, index) => (
+        {Array.from({ length: slideNumber }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
               <Card

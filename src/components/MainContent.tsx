@@ -32,15 +32,16 @@ function MainContent() {
 
     const found = data.find((d) => d.Country_clean === selectedCountry) || null;
     setCountryData(found);
-
-    if (!found) return;
-
     setJustChanged(true);
+    setStrength(null);
+    setWeakness(null);
+
     window.clearTimeout(timerRef.current ?? undefined);
     timerRef.current = window.setTimeout(() => {
       setJustChanged(false);
     }, 400);
 
+    if (!found) return;
     let metrics: MetricData[] = [];
 
     // iterate over object keys to get actual metrics vs expected metrics
