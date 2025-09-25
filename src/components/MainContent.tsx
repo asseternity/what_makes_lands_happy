@@ -14,115 +14,91 @@ import {
   getMetricRange,
 } from './ExpectedLevelCalculator';
 import type { CountryStats } from './ExpectedLevelCalculator';
-import MetricData from './MetricData';
-import OutlierData from './Outlier';
+import type { AbsoluteMetricData } from './AbsoluteMetricData';
 
 function MainContent() {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [absoluteStatistics, setAbsoluteStatistics] = useState<
+    AbsoluteMetricData[]
+  >([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [countryData, setCountryData] = useState<CountryStats | null>(null);
-  const [strength, setStrength] = useState<OutlierData | null>();
-  const [weakness, setWeakness] = useState<OutlierData | null>();
   const [justChanged, setJustChanged] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!selectedCountry) return;
+    // --- Prepare absolute metrics for all countries ---
+    let absoluteMetrics: AbsoluteMetricData[] = [];
 
-    const found = data.find((d) => d.Country_clean === selectedCountry) || null;
-    setCountryData(found);
-    setJustChanged(true);
-    setStrength(null);
-    setWeakness(null);
-
-    window.clearTimeout(timerRef.current ?? undefined);
-    timerRef.current = window.setTimeout(() => {
-      setJustChanged(false);
-    }, 400);
-
-    if (!found) return;
-    let metrics: MetricData[] = [];
-
-    // iterate over object keys to get actual metrics vs expected metrics
-    // gather ranges for normalization once
-    const metricRanges: Record<string, { min: number; max: number }> = {};
-    for (const key in found) {
-      const typedKey = key as keyof CountryStats;
-      if (typeof found[typedKey] === 'number') {
-        metricRanges[typedKey] = getMetricRange(data, typedKey);
+    for (const key in data[0]) {
+      const typedKey = key as keyof (typeof data)[0];
+      if (typeof data[0][typedKey] === 'number') {
+        absoluteMetrics.push({ metricName: key });
       }
     }
 
-    for (let key in found) {
-      if (found.hasOwnProperty(key)) {
-        const typedKey = key as keyof CountryStats;
-        const val = found[typedKey];
-        if (typeof val === 'number' && !isNaN(val)) {
-          const range = metricRanges[typedKey];
-          const actualNorm = normalizeValue(val, range.min, range.max);
-          // const expectedNorm = expectedLevel(data, found.Happiness, typedKey);
-          const expectedNorm = expectedLevel(data, found.Happiness);
-          metrics.push(new MetricData(typedKey, actualNorm, expectedNorm));
+    absoluteMetrics.forEach((metric) => {
+      // Find highest, lowest, average
+      let sum = 0;
+      data.forEach((country) => {
+        const value = country[
+          metric.metricName as keyof typeof country
+        ] as number;
+        if (typeof value === 'number') {
+          sum += value;
+          if (
+            metric.highestValue === undefined ||
+            value > metric.highestValue
+          ) {
+            metric.highestValue = value;
+            metric.highestCountryName = country.Country_clean;
+          }
+          if (metric.lowestValue === undefined || value < metric.lowestValue) {
+            metric.lowestValue = value;
+            metric.lowestCountryName = country.Country_clean;
+          }
         }
-      }
-    }
+      });
+      metric.averageValue = sum / data.length;
+    });
 
-    // assign weights to metrics
-    type MetricWeightData = {
-      metric: string;
-      weight_signed?: number;
-      weight_magnitude?: number;
-      weight?: number; // optional fallback for older files
-    };
-    type MetricWeightArray = MetricWeightData[];
-    const weight: MetricWeightArray = weightData as MetricWeightArray;
+    // --- If a country is selected, attach current and expected values ---
+    if (selectedCountry) {
+      const found =
+        data.find((d) => d.Country_clean === selectedCountry) || null;
+      setCountryData(found);
+      setJustChanged(true);
 
-    for (let i = 0; i < metrics.length; i++) {
-      for (let j = 0; j < weight.length; j++) {
-        if (metrics[i].MetricName === weight[j].metric) {
-          // prefer explicit signed/magnitude fields, fallback to 'weight' if present
-          const signed = weight[j].weight_signed ?? weight[j].weight ?? 0;
-          const magnitude =
-            weight[j].weight_magnitude ?? Math.abs(weight[j].weight ?? signed);
-          metrics[i].Weight = signed;
-          metrics[i].WeightMagnitude = magnitude;
-          break;
+      window.clearTimeout(timerRef.current ?? undefined);
+      timerRef.current = window.setTimeout(() => setJustChanged(false), 400);
+
+      if (found) {
+        const metricRanges: Record<string, { min: number; max: number }> = {};
+        for (const key in found) {
+          const typedKey = key as keyof CountryStats;
+          if (typeof found[typedKey] === 'number') {
+            metricRanges[typedKey] = getMetricRange(data, typedKey);
+          }
         }
+
+        absoluteMetrics.forEach((metric) => {
+          const val = found[metric.metricName as keyof CountryStats] as number;
+          if (typeof val === 'number' && !isNaN(val)) {
+            metric.currentCountryMetric = val;
+            metric.expectedForHappinessValue = expectedLevel(
+              data,
+              found.Happiness,
+              metric.metricName as keyof CountryStats
+            );
+          }
+        });
       }
     }
 
-    // find outlier metrics
-    if (metrics.length > 0) {
-      const strongest = metrics.reduce((best, cur) =>
-        cur.WeightedDifference > best.WeightedDifference ? cur : best
-      );
-      setStrength(
-        new OutlierData(
-          true,
-          false,
-          strongest.MetricName,
-          Math.round(strongest.PercentAwayFromExpected * 10) / 10, // display rounded
-          strongest.WeightedDifference
-        )
-      );
+    console.log(absoluteMetrics[12]);
 
-      const weakest = metrics.reduce((worst, cur) =>
-        cur.WeightedDifference < worst.WeightedDifference ? cur : worst
-      );
-      setWeakness(
-        new OutlierData(
-          false,
-          true,
-          weakest.MetricName,
-          Math.round(weakest.PercentAwayFromExpected * 10) / 10,
-          weakest.WeightedDifference
-        )
-      );
-    } else {
-      setStrength(null);
-      setWeakness(null);
-    }
+    setAbsoluteStatistics(absoluteMetrics);
 
     return () => {
       window.clearTimeout(timerRef.current ?? undefined);
@@ -189,9 +165,8 @@ function MainContent() {
         <CarouselOfCards
           flash={justChanged}
           countryName={selectedCountry}
-          happiness={countryData?.Happiness}
-          countryStrength={strength}
-          countryWeakness={weakness}
+          countryMetrics={countryData}
+          absoluteStatistics={absoluteStatistics}
         />
         <div className="px-10 mb-5 w-full flex flex-row justify-center items-center">
           <div className="w-60">
@@ -203,9 +178,8 @@ function MainContent() {
       <div className="hidden md:flex lg:hidden flex-row justify-center items-center gap-15">
         <CarouselOfCards
           countryName={selectedCountry}
-          happiness={countryData?.Happiness}
-          countryStrength={strength}
-          countryWeakness={weakness}
+          countryMetrics={countryData}
+          absoluteStatistics={absoluteStatistics}
         />
         <div className="flex-1 max-w-70">
           <h2>About</h2>
@@ -217,9 +191,8 @@ function MainContent() {
           <AllCards
             flash={justChanged}
             countryName={selectedCountry}
-            happiness={countryData?.Happiness}
-            countryStrength={strength}
-            countryWeakness={weakness}
+            countryMetrics={countryData}
+            absoluteStatistics={absoluteStatistics}
           />
         </div>
         <div className="flex-1 max-w-70 xl:max-w-1/2">

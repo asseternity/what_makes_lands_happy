@@ -14,7 +14,11 @@ import {
 } from '@/components/ui/carousel';
 import { Progress } from '@/components/ui/progress';
 import CountryProfile from './CountryProfile';
-import OutlierData from './Outlier';
+import type { CountryStats } from './ExpectedLevelCalculator';
+import type { AbsoluteMetricData } from './AbsoluteMetricData';
+import { MetricBarChart } from './charts/MetricBarChart';
+import { MultiMetricLineChart } from './charts/MultiMetricLineChart';
+import { MetricsTable } from './charts/MetricsTable';
 
 function titleCase(s: string): string {
   return s
@@ -27,19 +31,17 @@ function titleCase(s: string): string {
 type countryData = {
   flash?: boolean;
   countryName: string;
-  happiness: number | undefined | null;
-  countryStrength: OutlierData | undefined | null;
-  countryWeakness: OutlierData | undefined | null;
+  countryMetrics: CountryStats | undefined | null; // all metrics for our country
+  absoluteStatistics: AbsoluteMetricData[]; // highest/lowest/average/our/expected for all metrics
 };
 
 export function CarouselOfCards({
   flash = false,
   countryName,
-  happiness,
-  countryStrength,
-  countryWeakness,
+  countryMetrics,
+  absoluteStatistics,
 }: countryData) {
-  const slideNumber = countryStrength ? 3 : 1;
+  const slideNumber = countryMetrics ? 3 : 1;
 
   return (
     <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
@@ -52,30 +54,32 @@ export function CarouselOfCards({
               >
                 <CardHeader>
                   {index === 0 && <CardTitle>Happy Countries</CardTitle>}
-                  {index === 1 && (
-                    <CardTitle>{countryStrength?.MetricName}</CardTitle>
-                  )}
-                  {index === 2 && (
-                    <CardTitle>{countryWeakness?.MetricName}</CardTitle>
-                  )}
+                  {index === 1 && <CardTitle>{`tbd`}</CardTitle>}
+                  {index === 2 && <CardTitle>{`tbd`}</CardTitle>}
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
                   {index === 0 ? (
                     <>
-                      {happiness && (
+                      {countryMetrics && (
                         <>
                           <p>
                             {titleCase(countryName)} has the happiness rate of{' '}
-                            {happiness}
+                            {countryMetrics.Happiness}
                           </p>
-                          {happiness ? (
-                            <Progress value={happiness * 10} className="mb-5" />
+                          {countryMetrics ? (
+                            <div>
+                              <Progress
+                                value={countryMetrics.Happiness * 10}
+                                className="mb-5"
+                              />
+                              <div>Chart goes here</div>
+                            </div>
                           ) : (
                             <Progress value={0} className="mb-5" />
                           )}
                         </>
                       )}
-                      {!happiness && (
+                      {!countryMetrics && (
                         <>
                           {countryName ? (
                             <p>No data for {titleCase(countryName)}</p>
@@ -90,8 +94,8 @@ export function CarouselOfCards({
                   )}
                   {index === 1 && (
                     <div>
-                      {countryStrength ? (
-                        <p>{countryStrength?.DisplayPercent}% from expected</p>
+                      {countryMetrics ? (
+                        <p>{`data found: tbd`}</p>
                       ) : (
                         <p>No data</p>
                       )}
@@ -99,8 +103,8 @@ export function CarouselOfCards({
                   )}
                   {index === 2 && (
                     <div>
-                      {countryWeakness ? (
-                        <p>{countryWeakness?.DisplayPercent}% from expected</p>
+                      {countryMetrics ? (
+                        <p>{`data found: tbd`}</p>
                       ) : (
                         <p>No data</p>
                       )}
@@ -111,7 +115,7 @@ export function CarouselOfCards({
                   <CardFooter className="mt-auto flex-col gap-2">
                     <CountryProfile
                       Country={countryName}
-                      disabled={!happiness}
+                      disabled={!countryMetrics}
                       flash={flash}
                     />
                   </CardFooter>

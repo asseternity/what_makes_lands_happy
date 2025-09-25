@@ -69,9 +69,18 @@ createRoot(document.getElementById('root')!).render(
 // [v] choropleth the map with happiness numbers
 // [v] write readme
 // [v] animations for N/A countries too
-// [_] replace "strength" and "weakness" in cards and profile with CLEAR charts:
+// [v] plans: replace "strength" and "weakness" in cards and profile with CLEAR charts:
 // - explaining the methodology (CLARITY)
 // - showing the ourliers for the country (DATA SCIENCE)
+// tools:
+// https://medium.com/@asyncme/a-guide-to-creating-charts-in-react-with-typescript-8ac9fd17fa74
+// - Chart.js: A powerful, simple, and flexible charting library.
+// - Recharts: Built on top of D3.js for React.
+// - Victory: Declarative charting library for React.
+// [v] replace "strength" and "weakness" outliers with: add "our country's value" and "expected value for our happiness" to absoluteStatistics
+// [v] show graphs, pretty UI
+// [_] finalize graphs (3 cards), pretty UI
+// [_] CLARIFY!!! explain CLEARLY what the methodology is
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
 
 // --- NDS ---
