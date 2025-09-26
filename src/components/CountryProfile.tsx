@@ -7,6 +7,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import type { CountryStats } from './ExpectedLevelCalculator';
+import type { AbsoluteMetricData } from './AbsoluteMetricData';
+import { MetricsTable } from './charts/MetricsTable';
+import { useMemo } from 'react';
 
 function titleCase(s: string): string {
   return s
@@ -16,46 +20,49 @@ function titleCase(s: string): string {
     .join(' ');
 }
 
-type CountryData = {
+type Props = {
   flash?: boolean;
   disabled?: boolean;
-  Country: string;
-  //   Country_clean: string;
-  //   Region: string;
-  //   Happiness: number;
-  //   'Average Wage (USD\/year)': number;
-  //   'Infant Survival Rate': number;
-  //   'Alcohol Consumption Rate': number;
-  //   'Life Expectancy': number;
-  //   'Netflix (USD\/month)': number;
-  //   'Women Safety Index': number;
-  //   'Average Winter Temperature': number;
-  //   'Average Summer Temperature': number;
-  //   Population: number;
-  //   'Energy Per Capita': number;
-  //   '% of Power from Fossil Fuels': number;
-  //   '% of Power from Nuclear': number;
-  //   '% of Power from Renewables': number;
-  //   '% of Agricultural Land': number;
-  //   '% of Forest Land': number;
-  //   Territory: number;
-  //   'Average Rainfall': number;
-  //   Corruption: number;
-  //   'Wheat Production (tonnes)': number;
-  //   'Rye Production (tonnes)': number;
-  //   'Potatoes Production (tonnes)': number;
-  //   'Meat, chicken Production (tonnes)': number;
-  //   'Avocados Production (tonnes)': number;
-  //   'Petrol Price (USD\/liter)': number;
-  //   'Daily Oil Consumption (Barrels)': number;
-  //   'CO2 Emissions (ton per capita)': number;
+  Country: CountryStats | undefined | null;
+  AllCountries: AbsoluteMetricData[];
 };
 
 export default function CountryProfile({
   Country,
+  AllCountries,
   disabled = false,
   flash = false,
-}: CountryData) {
+}: Props) {
+  const rows = useMemo(() => {
+    if (!Country || !AllCountries || AllCountries.length === 0) return [];
+
+    return AllCountries.filter(
+      (m) => String(m.metricName).toLowerCase() !== 'happiness'
+    ).map((m) => {
+      // coerce to numbers; may be undefined/null
+      const actual =
+        typeof m.currentCountryMetric === 'number'
+          ? m.currentCountryMetric
+          : NaN;
+      const expected =
+        typeof m.expectedForHappinessValue === 'number'
+          ? m.expectedForHappinessValue
+          : NaN;
+      const average = typeof m.averageValue === 'number' ? m.averageValue : NaN;
+      const top = typeof m.highestValue === 'number' ? m.highestValue : NaN;
+      const bottom = typeof m.lowestValue === 'number' ? m.lowestValue : NaN;
+
+      return {
+        metric: m.metricName,
+        actual,
+        expected,
+        average,
+        top,
+        bottom,
+      };
+    });
+  }, [Country, AllCountries]);
+
   return (
     <Dialog>
       {disabled ? (
@@ -64,7 +71,7 @@ export default function CountryProfile({
           type="button"
           disabled
         >
-          Profile
+          Data Table
         </Button>
       ) : (
         <DialogTrigger asChild>
@@ -72,17 +79,17 @@ export default function CountryProfile({
             className={`w-20 ${flash ? 'text-primary' : ''}`}
             type="button"
           >
-            Profile
+            Data Table
           </Button>
         </DialogTrigger>
       )}
-
-      <DialogContent>
+      <DialogContent className="[&>button:last-child]:hidden w-full max-w-6xl md:max-w-4xl sm:max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{titleCase(Country)}</DialogTitle>
           <DialogDescription>
-            This is the country's profile information data. Maybe have multiple
-            pages here or something.
+            <MetricsTable
+              country={Country ? Country.Country_clean : ''}
+              rows={rows}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -21,7 +21,6 @@ type Row = {
   expected: number;
   average: number;
   top: number;
-  bottom: number;
 };
 
 type Props = {
@@ -36,11 +35,10 @@ export function MetricsTable({ country, rows }: Props) {
         <TableRow>
           <TableHead>Metric</TableHead>
           <TableHead>{titleCase(country)}</TableHead>
-          <TableHead>Expected</TableHead>
           <TableHead>Average</TableHead>
           <TableHead>Top</TableHead>
-          <TableHead>Bottom</TableHead>
-          <TableHead>% Away</TableHead>
+          <TableHead>Expected</TableHead>
+          <TableHead>Over/Under Expected</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -48,10 +46,9 @@ export function MetricsTable({ country, rows }: Props) {
           <TableRow key={i}>
             <TableCell>{r.metric}</TableCell>
             <TableCell>{r.actual.toFixed(2)}</TableCell>
-            <TableCell>{r.expected.toFixed(2)}</TableCell>
             <TableCell>{r.average.toFixed(2)}</TableCell>
             <TableCell>{r.top.toFixed(2)}</TableCell>
-            <TableCell>{r.bottom.toFixed(2)}</TableCell>
+            <TableCell>{r.expected.toFixed(2)}</TableCell>
             <TableCell>
               {(((r.actual - r.expected) / r.expected) * 100).toFixed(1)}%
             </TableCell>

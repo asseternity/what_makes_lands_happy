@@ -183,7 +183,8 @@ function MainContent() {
               </div>
               <div className="mb-5">
                 <CountryProfile
-                  Country={selectedCountry}
+                  Country={countryData}
+                  AllCountries={absoluteStatistics}
                   disabled={!countryData}
                   flash={justChanged}
                 />
