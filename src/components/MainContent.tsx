@@ -110,7 +110,15 @@ function MainContent() {
   }, [selectedCountry]);
 
   return (
-    <div className="container w-full h-screen bg-primary-foreground font-display">
+    <div className="container w-full h-screen bg-primary-foreground font-display relative">
+      <Button
+        type="button"
+        variant="outline"
+        className="bg-primary fixed z-10 bottom-3 right-3 text-xs p-2"
+        onClick={() => console.log('clicked')}
+      >
+        Methodology
+      </Button>
       <div className="bg-primary text-primary-foreground flex flex-row justify-between items-center gap-4 p-3 w-full h-15">
         <div className="flex flex-row justify-start items-center gap-4">
           <a href="" target="_blank">
