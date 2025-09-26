@@ -42,7 +42,11 @@ export function CarouselOfCards({
   const filteredStatistics = useMemo(
     () =>
       absoluteStatistics.filter(
-        (m) => String(m.metricName).toLowerCase() !== 'happiness'
+        (m) =>
+          String(m.metricName).toLowerCase() !== 'happiness' &&
+          m.currentCountryMetric !== null &&
+          m.currentCountryMetric !== 0 &&
+          m.currentCountryMetric !== undefined
       ),
     [absoluteStatistics]
   );
@@ -70,7 +74,7 @@ export function CarouselOfCards({
 
     const weight = weightMap.get(String(metric.metricName).toLowerCase()) ?? 0;
     setShownMetricWeight(
-      `${metric.metricName} has the correlation of ${Math.round(weight * 100)}%`
+      `${metric.metricName} has the correlation to happiness of ${Math.round(weight * 100)}%`
     );
   };
 
