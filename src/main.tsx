@@ -92,13 +92,4 @@ createRoot(document.getElementById('root')!).render(
 // [_] add UNITS to column names
 // [_] add sources
 // [_] publish NDS
-
-// --- DOTNET ---
-
-// [_] do a dotnet backend
-// [_] make a postgreSQL db in the dotnet backend
-// [_] put dummy NDS into postgresql
-// [_] publish backend via railway
-// [_] connect backend and frontend via api calls
-
 // [_] publish this project

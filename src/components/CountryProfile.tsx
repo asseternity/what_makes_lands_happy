@@ -3,7 +3,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -11,14 +10,6 @@ import type { CountryStats } from './ExpectedLevelCalculator';
 import type { AbsoluteMetricData } from './AbsoluteMetricData';
 import { MetricsTable } from './charts/MetricsTable';
 import { useMemo } from 'react';
-
-function titleCase(s: string): string {
-  return s
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
 
 type Props = {
   flash?: boolean;
