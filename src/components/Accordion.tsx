@@ -17,27 +17,28 @@ export function AccordionFooter() {
         <AccordionTrigger>What is this project?</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            A data-driven explorer of national wellbeing that combines public
-            datasets to show what correlates with — and typically accompanies —
-            a country’s happiness score.
+            A data explorer that brings together many public datasets to help
+            you understand what goes along with a country’s happiness score.
           </p>
           <ul>
             <li>
-              <strong>Main goal:</strong> Explain which measurable factors line
-              up with happiness.
+              <strong>What it contains:</strong> happiness scores plus lots of
+              supporting metrics (health, income, energy, population, emissions,
+              food, etc.).
             </li>
             <li>
-              <strong>What we do:</strong> gather, clean and merge many
-              datasets; compute correlations; predict an “expected” value for
-              each metric given a country’s happiness.
+              <strong>What it shows:</strong> for each metric you get the actual
+              number, what we’d expect given that country’s happiness, and how
+              far the country is from that expectation.
             </li>
             <li>
-              <strong>Output:</strong> country profiles that highlight the
-              biggest strengths and weaknesses versus expectation.
+              <strong>Why useful:</strong> quickly spot where a country is doing
+              noticeably better or worse than peers with similar happiness
+              levels.
             </li>
             <li>
-              <strong>Quick caveat:</strong> these are statistical associations
-              — not proof of cause and effect.
+              <strong>Quick reminder:</strong> these are comparisons and
+              patterns — they don’t prove cause and effect.
             </li>
           </ul>
         </AccordionContent>
@@ -46,28 +47,24 @@ export function AccordionFooter() {
         <AccordionTrigger>How to read the map</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            The map visualizes the official happiness score and provides entry
-            points to each country’s deeper profile.
+            The map is the main entry point — it colors countries by official
+            happiness and helps you jump into each country’s details.
           </p>
           <ul>
             <li>
-              <strong>Colors:</strong> represent the happiness score (green =
-              higher, red = lower).
+              <strong>Colors:</strong> show happiness (greens = higher, reds =
+              lower).
             </li>
             <li>
-              <strong>Hover:</strong> shows top metrics for that country at a
-              glance.
+              <strong>Click:</strong> opens the country profile with metric
+              cards and comparisons.
             </li>
             <li>
-              <strong>Click:</strong> opens the country profile with charts,
-              expected vs actual values, and outlier cards.
+              <strong>Search & keyboard:</strong> use the search box or press
+              Enter to jump to a country.
             </li>
             <li>
-              <strong>Search / keyboard:</strong> use the search box or press
-              Enter on a selected country name.
-            </li>
-            <li>
-              <strong>Tip:</strong> use the legend and zoom controls to inspect
+              <strong>Controls:</strong> there are zoom controls to inspect
               small countries or regions.
             </li>
           </ul>
@@ -77,36 +74,28 @@ export function AccordionFooter() {
         <AccordionTrigger>Data tables</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            Each country profile exposes per-metric details so you can compare
-            actual performance to what we’d expect for that country’s happiness
-            level.
+            Country pages give both a quick summary and deeper numbers so you
+            can understand strengths, weaknesses and the full metric context.
           </p>
           <ul>
             <li>
-              <strong>Top 3 strengths:</strong> metrics where the country is
-              noticeably above expected.
+              <strong>Metric cards:</strong> actual value, expected value (based
+              on similar-happiness countries), and the difference.
             </li>
             <li>
-              <strong>Top 3 weaknesses:</strong> metrics where the country is
-              noticeably below expected.
+              <strong>Context:</strong> global average, top country and range
+              for each metric so you can compare easily.
             </li>
             <li>
-              <strong>Shown columns:</strong> actual value, expected value, %
-              away from expected, global average, top country and year/source.
+              <strong>Highlights:</strong> both the biggest positive deviations
+              and the biggest negative ones are surfaced — but the page also
+              lets you explore every metric, not just the top 3 lists.
             </li>
             <li>
-              <strong>How % away works (plain):</strong> (Actual − Expected) ÷
-              Expected × 100 — positive means higher than expected, negative
-              means lower.
-            </li>
-            <li>
-              <strong>Edge cases:</strong> when the expected value is near zero
-              we show absolute differences or a normalized score to avoid
-              misleading huge percentages.
-            </li>
-            <li>
-              <strong>Export:</strong> you can download raw tables as JSON/CSV
-              from the exports area for further analysis.
+              <strong>Interpretation tip:</strong> positive difference means the
+              country is above expectation; negative means below. For some
+              metrics (pollution, infant deaths) lower is better — interpret
+              accordingly.
             </li>
           </ul>
         </AccordionContent>
@@ -115,31 +104,28 @@ export function AccordionFooter() {
         <AccordionTrigger>Data sources</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            All figures come from public or curated data files. Every country
-            detail page links to the original source and the year used for that
-            metric.
+            Data is pulled from public and curated files. Each country detail
+            links to the original source and the year used.
           </p>
           <ul>
             <li>
-              <strong>Types of sources:</strong> international reports, open
-              datasets (CSV), and curated Kaggle files.
+              <strong>Examples of inputs:</strong> World Happiness, wage data,
+              life expectancy, energy and power mix, population, CO₂, food
+              production, petrol prices and more.
             </li>
             <li>
-              <strong>Traceability:</strong> source name, file name and
-              extraction year are listed on each country page.
+              <strong>Updates & versions:</strong> datasets are cached and
+              refreshed periodically; references to sources are provided here.
             </li>
             <li>
-              <strong>Licensing & attribution:</strong> sources keep their
-              original licenses — check the linked source file for terms.
+              <strong>Reporting issues:</strong> if you spot an error, source
+              corrections are tracked through the project repo.
             </li>
             <li>
-              <strong>Update cadence:</strong> datasets are refreshed
-              periodically; version and extraction date are shown with each
-              source link.
-            </li>
-            <li>
-              <strong>Got a correction?</strong> report source errors via the
-              repository / issue tracker (links provided on the project page).
+              <strong>Practical caveats:</strong> These are observational
+              patterns, not proof of cause. Percent differences can be
+              misleading when the expected value is near zero — in those cases
+              we show absolute or normalized numbers instead.
             </li>
           </ul>
         </AccordionContent>
