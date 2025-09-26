@@ -8,6 +8,7 @@ import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
 import CountryProfile from './CountryProfile';
+import Methodology from './Methodology';
 import { expectedLevel, getMetricRange } from './ExpectedLevelCalculator';
 import type { CountryStats } from './ExpectedLevelCalculator';
 import type { AbsoluteMetricData } from './AbsoluteMetricData';
@@ -111,14 +112,7 @@ function MainContent() {
 
   return (
     <div className="container w-full h-screen bg-primary-foreground font-display relative">
-      <Button
-        type="button"
-        variant="outline"
-        className="bg-primary fixed z-10 bottom-3 right-3 text-xs p-2"
-        onClick={() => console.log('clicked')}
-      >
-        Methodology
-      </Button>
+      <Methodology />
       <div className="bg-primary text-primary-foreground flex flex-row justify-between items-center gap-4 p-3 w-full h-15">
         <div className="flex flex-row justify-start items-center gap-4">
           <a href="" target="_blank">

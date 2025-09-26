@@ -84,7 +84,8 @@ createRoot(document.getElementById('root')!).render(
 // [v] flip through all metrics in the carousel!!!
 // [v] fill the 'country profile' popup with all numbers / average / expected / top / bottom
 // [v] CLARIFY!!! explain CLEARLY what the methodology is --- with a popup when the site opens + button on header
-// [_] add a popup (SAME AS PROFILE) to "methodology" and explain "correlation and "expected" there"
+// [v] add a popup (SAME AS PROFILE) to "methodology"
+// [_] explain "correlation and "expected" there" - with EXAMPLE
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
 
 // --- NDS ---
