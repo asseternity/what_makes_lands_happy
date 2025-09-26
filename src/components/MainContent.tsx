@@ -1,20 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '/world-map-svgrepo-com.svg';
 import data from '../dummy/happiness_df.json';
-import weightData from '../dummy/happiness_corr.json';
+import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
-import { AllCards } from './AllCards';
-import {
-  expectedLevel,
-  normalizeValue,
-  getMetricRange,
-} from './ExpectedLevelCalculator';
+import CountryProfile from './CountryProfile';
+import { expectedLevel, getMetricRange } from './ExpectedLevelCalculator';
 import type { CountryStats } from './ExpectedLevelCalculator';
 import type { AbsoluteMetricData } from './AbsoluteMetricData';
+
+function titleCase(s: string): string {
+  return s
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 function MainContent() {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
@@ -107,10 +111,10 @@ function MainContent() {
 
   return (
     <div className="container w-full h-screen bg-primary-foreground font-display">
-      <div className="bg-primary text-primary-foreground flex flex-row justify-between items-center gap-4 p-3 w-full h-20">
+      <div className="bg-primary text-primary-foreground flex flex-row justify-between items-center gap-4 p-3 w-full h-15">
         <div className="flex flex-row justify-start items-center gap-4">
           <a href="" target="_blank">
-            <img src={logo} className="logo h-14" alt="Vite logo" />
+            <img src={logo} className="logo h-10" alt="Vite logo" />
           </a>
           <h1>Happiness Report</h1>
         </div>
@@ -152,7 +156,7 @@ function MainContent() {
         </div>
       </div>
       <div
-        className="card m-5 p-4 flex flex-col justify-center items-center gap-4 relative rounded-full h-1/3"
+        className="card m-5 p-4 flex flex-col justify-center items-center gap-4 relative rounded-full h-1/4"
         ref={mapContainerRef}
       >
         <WorldMap
@@ -161,41 +165,41 @@ function MainContent() {
           countryStats={data}
         />
       </div>
-      <div className="flex flex-col justify-center items-center gap-4 md:hidden">
-        <CarouselOfCards
-          flash={justChanged}
-          countryName={selectedCountry}
-          countryMetrics={countryData}
-          absoluteStatistics={absoluteStatistics}
-        />
-        <div className="px-10 mb-5 w-full flex flex-row justify-center items-center">
-          <div className="w-60">
-            <h2>About</h2>
-            <AccordionFooter />
-          </div>
-        </div>
-      </div>
-      <div className="hidden md:flex lg:hidden flex-row justify-center items-center gap-15">
-        <CarouselOfCards
-          countryName={selectedCountry}
-          countryMetrics={countryData}
-          absoluteStatistics={absoluteStatistics}
-        />
-        <div className="flex-1 max-w-70">
-          <h2>About</h2>
-          <AccordionFooter />
-        </div>
-      </div>
-      <div className="hidden lg:flex flex-row justify-center items-center gap-15">
-        <div className="flex-1 max-w-xl">
-          <AllCards
+      <div className="flex flex-col md:flex-row justify-center items-center gap-15 p-5">
+        <div className="flex-1 flex flex-col items-start max-w-200">
+          {countryData ? (
+            <div className="flex flex-row justify-center items-center gap-3 w-full h-20 lg:h-12">
+              <div className="flex-1 flex flex-col">
+                <div>
+                  {titleCase(selectedCountry)} has the happiness rate of{' '}
+                  <span className="font-bold text-primary">
+                    {countryData?.Happiness}
+                  </span>
+                </div>
+                <Progress
+                  value={countryData?.Happiness * 10}
+                  className="mb-5"
+                />
+              </div>
+              <div className="mb-5">
+                <CountryProfile
+                  Country={selectedCountry}
+                  disabled={!countryData}
+                  flash={justChanged}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="h-12"></div>
+          )}
+          <CarouselOfCards
             flash={justChanged}
             countryName={selectedCountry}
             countryMetrics={countryData}
             absoluteStatistics={absoluteStatistics}
           />
         </div>
-        <div className="flex-1 max-w-70 xl:max-w-1/2">
+        <div className="flex-1 max-w-100">
           <h2>About</h2>
           <AccordionFooter />
         </div>

@@ -4,9 +4,19 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
+  Cell,
   ResponsiveContainer,
 } from 'recharts';
+
+function titleCase(s: string | undefined): string {
+  if (typeof s === 'string') {
+    return s
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  } else return '';
+}
 
 type Props = {
   country: string;
@@ -26,28 +36,36 @@ export function MetricBarChart({
   top,
 }: Props) {
   const data = [
+    { name: titleCase(country), value: actual },
     { name: 'Expected', value: expected },
-    { name: country, value: actual },
     { name: 'Average', value: average },
-    { name: `Top: ${top.country}`, value: top.value },
+    { name: `Top: ${titleCase(top.country)}`, value: top.value },
   ];
 
+  const colors = ['#8884d8', '#006994', '#ffc658', '#ff7300'];
+
   return (
-    <div className="w-full h-80">
+    <div className="w-full h-40">
       <ResponsiveContainer>
         <BarChart data={data}>
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+          <YAxis tick={{ fontSize: 10 }} />
           <Tooltip />
-          <Legend />
-          <Bar dataKey="value" fill="#8884d8" />
+          <Bar dataKey="value" fill="#8884d8">
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index} ${entry}`}
+                fill={colors[index % colors.length]}
+              />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
-      {actual && expected && (
-        <p className="text-sm mt-2 text-center">
-          {country} has {metric} of {actual}, which is{' '}
+      {actual && expected && top.country && (
+        <p className="text-xs mt-2 text-center">
+          {titleCase(country)}'s' {metric} is {actual}, which is{' '}
           {(((actual - expected) / expected) * 100).toFixed(1)}% from expected.
-          Highest is {top.country} at {top.value}.
+          Highest is {titleCase(top.country)} at {top.value}.
         </p>
       )}
     </div>

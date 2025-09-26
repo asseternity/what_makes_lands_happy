@@ -79,14 +79,17 @@ createRoot(document.getElementById('root')!).render(
 // - Victory: Declarative charting library for React.
 // [v] replace "strength" and "weakness" outliers with: add "our country's value" and "expected value for our happiness" to absoluteStatistics
 // [v] show graphs, pretty UI
-// [_] finalize graphs (3 cards), pretty UI
-// [_] CLARIFY!!! explain CLEARLY what the methodology is
+// [v] finalize graphs (3 cards), pretty UI
+// [v] remove AllCards, have Carousel only!
+// [v] flip through all metrics in the carousel!!!
+// [_] fill the 'country profile' popup with all numbers / average / expected / top / bottom
+// [_] CLARIFY!!! explain CLEARLY what the methodology is --- with a popup when the site opens + button on header
 // [_] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
 
 // --- NDS ---
 
-// [_] add turkey and US
 // [_] finish NDS data science project
+// [_] add UNITS to column names
 // [_] add sources
 // [_] publish NDS
 

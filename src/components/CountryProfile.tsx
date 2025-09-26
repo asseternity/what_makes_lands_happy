@@ -69,7 +69,7 @@ export default function CountryProfile({
       ) : (
         <DialogTrigger asChild>
           <Button
-            className={`w-full ${flash ? 'text-primary' : ''}`}
+            className={`w-20 ${flash ? 'text-primary' : ''}`}
             type="button"
           >
             Profile

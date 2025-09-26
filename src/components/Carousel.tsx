@@ -1,38 +1,28 @@
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from '@/components/ui/card';
-import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Progress } from '@/components/ui/progress';
-import CountryProfile from './CountryProfile';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import weightData from '../dummy/happiness_corr.json';
+import { useEffect, useMemo, useState } from 'react';
+import { MetricBarChart } from './charts/MetricBarChart';
 import type { CountryStats } from './ExpectedLevelCalculator';
 import type { AbsoluteMetricData } from './AbsoluteMetricData';
-import { MetricBarChart } from './charts/MetricBarChart';
-import { MultiMetricLineChart } from './charts/MultiMetricLineChart';
-import { MetricsTable } from './charts/MetricsTable';
 
-function titleCase(s: string): string {
+function titleCase(s: string) {
   return s
     .toLowerCase()
     .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
 }
 
-type countryData = {
+type Props = {
   flash?: boolean;
   countryName: string;
-  countryMetrics: CountryStats | undefined | null; // all metrics for our country
-  absoluteStatistics: AbsoluteMetricData[]; // highest/lowest/average/our/expected for all metrics
+  countryMetrics: CountryStats | undefined | null;
+  absoluteStatistics: AbsoluteMetricData[];
 };
 
 export function CarouselOfCards({
@@ -40,93 +30,153 @@ export function CarouselOfCards({
   countryName,
   countryMetrics,
   absoluteStatistics,
-}: countryData) {
-  const slideNumber = countryMetrics ? 3 : 1;
+}: Props) {
+  const [shownMetric, setShownMetric] = useState<
+    AbsoluteMetricData | undefined
+  >();
+  const [slideCount, setSlideCount] = useState<number>(1);
+  const [shownMetricWeight, setShownMetricWeight] = useState<string>('');
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  // filtered stats (remove Happiness)
+  const filteredStatistics = useMemo(
+    () =>
+      absoluteStatistics.filter(
+        (m) => String(m.metricName).toLowerCase() !== 'happiness'
+      ),
+    [absoluteStatistics]
+  );
+
+  // memoize weight map
+  const weightMap = useMemo(() => {
+    const m = new Map<string, number>();
+    (weightData as { metric: string; weight_signed: number }[]).forEach((w) =>
+      m.set(w.metric.toLowerCase(), w.weight_signed)
+    );
+    return m;
+  }, []);
+
+  const updateShownMetric = (index: number) => {
+    if (!filteredStatistics || filteredStatistics.length === 0) {
+      setShownMetric(undefined);
+      setShownMetricWeight('');
+      return;
+    }
+    const safeIndex =
+      ((index % filteredStatistics.length) + filteredStatistics.length) %
+      filteredStatistics.length;
+    const metric = filteredStatistics[safeIndex];
+    setShownMetric(metric);
+
+    const weight = weightMap.get(String(metric.metricName).toLowerCase()) ?? 0;
+    setShownMetricWeight(
+      `${metric.metricName} has the correlation of ${Math.round(weight * 100)}%`
+    );
+  };
+
+  // when filteredStatistics (or country) changes, reset/clamp index and shown metric
+  useEffect(() => {
+    if (!filteredStatistics || filteredStatistics.length === 0) {
+      setSlideCount(1);
+      setCurrentIndex(0);
+      setShownMetric(undefined);
+      setShownMetricWeight('');
+      return;
+    }
+    setSlideCount(filteredStatistics.length);
+    // clamp current index to valid range and update shown metric
+    const clamped = Math.min(currentIndex, filteredStatistics.length - 1);
+    setCurrentIndex(clamped);
+    updateShownMetric(clamped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredStatistics]); // intentionally omit currentIndex to avoid loops
+
+  // safe functional handlers
+  const handlePrev = () => {
+    setCurrentIndex((prev) => {
+      if (!filteredStatistics || filteredStatistics.length === 0) return 0;
+      const len = filteredStatistics.length;
+      const next = (prev - 1 + len) % len;
+      updateShownMetric(next);
+      return next;
+    });
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => {
+      if (!filteredStatistics || filteredStatistics.length === 0) return 0;
+      const len = filteredStatistics.length;
+      const next = (prev + 1) % len;
+      updateShownMetric(next);
+      return next;
+    });
+  };
 
   return (
-    <Carousel className="w-2/3 max-w-xs" opts={{ loop: true }}>
-      <CarouselContent>
-        {Array.from({ length: slideNumber }).map((_, index) => (
-          <CarouselItem key={index}>
+    <div className="w-full flex flex-col justify-center items-center">
+      <Carousel opts={{ loop: true }}>
+        <CarouselContent>
+          <CarouselItem key={currentIndex}>
             <div className="p-1">
               <Card
-                className={`bg-accent transition-transform-colors duration-300 ${flash ? 'scale-90 bg-primary' : ''}`}
+                className={`lg:w-150 h-90 lg:h-80 bg-accent transition-transform-colors duration-300 ${
+                  flash ? 'scale-90 bg-primary' : ''
+                }`}
               >
                 <CardHeader>
-                  {index === 0 && <CardTitle>Happy Countries</CardTitle>}
-                  {index === 1 && <CardTitle>{`tbd`}</CardTitle>}
-                  {index === 2 && <CardTitle>{`tbd`}</CardTitle>}
+                  <CardTitle>
+                    {countryMetrics
+                      ? `${shownMetric?.metricName} | ${shownMetricWeight}`
+                      : ''}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
-                  {index === 0 ? (
-                    <>
-                      {countryMetrics && (
-                        <>
-                          <p>
-                            {titleCase(countryName)} has the happiness rate of{' '}
-                            {countryMetrics.Happiness}
-                          </p>
-                          {countryMetrics ? (
-                            <div>
-                              <Progress
-                                value={countryMetrics.Happiness * 10}
-                                className="mb-5"
-                              />
-                              <div>Chart goes here</div>
-                            </div>
-                          ) : (
-                            <Progress value={0} className="mb-5" />
-                          )}
-                        </>
-                      )}
-                      {!countryMetrics && (
-                        <>
-                          {countryName ? (
-                            <p>No data for {titleCase(countryName)}</p>
-                          ) : (
-                            <p>Click on the map to see happiness data!</p>
-                          )}
-                        </>
-                      )}
-                    </>
+                  {countryMetrics && shownMetric ? (
+                    <MetricBarChart
+                      country={countryName}
+                      metric={shownMetric?.metricName}
+                      expected={shownMetric?.expectedForHappinessValue}
+                      actual={shownMetric?.currentCountryMetric}
+                      average={shownMetric?.averageValue}
+                      top={{
+                        country: shownMetric?.highestCountryName,
+                        value: shownMetric?.highestValue,
+                      }}
+                    />
                   ) : (
-                    <></>
-                  )}
-                  {index === 1 && (
-                    <div>
-                      {countryMetrics ? (
-                        <p>{`data found: tbd`}</p>
+                    <div className="text-center">
+                      {countryName ? (
+                        <p>No data for {titleCase(countryName)}</p>
                       ) : (
-                        <p>No data</p>
-                      )}
-                    </div>
-                  )}
-                  {index === 2 && (
-                    <div>
-                      {countryMetrics ? (
-                        <p>{`data found: tbd`}</p>
-                      ) : (
-                        <p>No data</p>
+                        <p>Click on the map to see happiness data!</p>
                       )}
                     </div>
                   )}
                 </CardContent>
-                {index === 0 && (
-                  <CardFooter className="mt-auto flex-col gap-2">
-                    <CountryProfile
-                      Country={countryName}
-                      disabled={!countryMetrics}
-                      flash={flash}
-                    />
-                  </CardFooter>
-                )}
               </Card>
             </div>
           </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+        </CarouselContent>
+      </Carousel>
+      <div className="flex gap-2 mt-3 justify-center">
+        <button
+          onClick={handlePrev}
+          aria-label="Previous metric"
+          className="px-3 py-1 border rounded"
+        >
+          ◀
+        </button>
+        <div className="flex items-center px-2 text-sm">
+          {countryMetrics ? `${currentIndex + 1} / ${slideCount}` : '—'}
+        </div>
+        <button
+          onClick={handleNext}
+          aria-label="Next metric"
+          className="px-3 py-1 border rounded"
+        >
+          ▶
+        </button>
+      </div>
+    </div>
   );
 }
