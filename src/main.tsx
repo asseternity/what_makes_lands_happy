@@ -87,11 +87,3 @@ createRoot(document.getElementById('root')!).render(
 // [v] add a popup (SAME AS PROFILE) to "methodology"
 // [v] explain "correlation and "expected" there" - with EXAMPLE
 // [v] jest/vitest for: map click callback (sets selected country); search functions; cards rendering correct data
-
-// --- NDS ---
-
-// [_] finish NDS data science project
-// [_] add UNITS to column names
-// [_] add sources
-// [_] publish NDS
-// [_] publish this project
