@@ -17,9 +17,9 @@ export default function Methodology() {
           Methodology
         </Button>
       </DialogTrigger>
-      <DialogContent className="[&>button:last-child]:hidden w-full max-w-6xl md:max-w-4xl sm:max-w-3xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogDescription>
+      <DialogContent className="[&>button:last-child]:hidden w-[90vw] max-w-6xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader className="text-left">
+          <DialogDescription className="text-left">
             <h1 className="font-bold text-primary text-2xl">
               How "Expected" and "% Away from Expected" Work
             </h1>
@@ -67,7 +67,7 @@ export default function Methodology() {
               3. How “% away from expected” is calculated
             </h2>
             <p>Formula:</p>
-            <pre>(Actual – Expected) ÷ Expected × 100</pre>
+            <i>(Actual – Expected) ÷ Expected × 100</i>
             <ul>
               <li>
                 <strong>Positive %</strong> → the country has{' '}
