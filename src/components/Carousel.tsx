@@ -4,7 +4,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import weightData from '../dummy/happiness_corr.json';
+import weightData from '../data/happiness_corr.json';
 import { useEffect, useMemo, useState } from 'react';
 import { MetricBarChart } from './charts/MetricBarChart';
 import type { CountryStats } from './ExpectedLevelCalculator';
@@ -43,7 +43,7 @@ export function CarouselOfCards({
     () =>
       absoluteStatistics.filter(
         (m) =>
-          String(m.metricName).toLowerCase() !== 'happiness' &&
+          String(m.metricName).toLowerCase() !== 'happiness (score 0-10)' &&
           m.currentCountryMetric !== null &&
           m.currentCountryMetric !== 0 &&
           m.currentCountryMetric !== undefined
@@ -123,18 +123,16 @@ export function CarouselOfCards({
           <CarouselItem key={currentIndex}>
             <div className="p-1">
               <Card
-                className={`lg:w-150 h-90 lg:h-80 bg-accent transition-transform-colors duration-300 ${
+                className={`lg:w-150 h-130 lg:h-120 bg-accent transition-transform-colors duration-300 ${
                   flash ? 'scale-90 bg-primary' : ''
                 }`}
               >
                 <CardHeader>
                   <CardTitle>
-                    {countryMetrics
-                      ? `${shownMetric?.metricName} | ${shownMetricWeight}`
-                      : ''}
+                    {countryMetrics ? `${shownMetricWeight}` : ''}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col items-center justify-center p-4 max-h-60">
+                <CardContent className="flex flex-col items-center justify-center p-4 max-h-100">
                   {countryMetrics && shownMetric ? (
                     <MetricBarChart
                       country={countryName}

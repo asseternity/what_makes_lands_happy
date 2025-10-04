@@ -2,36 +2,55 @@ type CountryStats = {
   Country: string;
   Country_clean: string;
   Region: string;
-  Happiness: number;
-  'Median Salary': number | null;
-  'Average Salary': number | null;
-  'Lowest Salary': number | null;
-  'Highest Salary': number | null;
-  'Infant Survival Rate': number | null;
-  'Alcohol Consumption Rate': number | null;
-  'Life Expectancy': number | null;
-  'Netflix (USD/month)': number | null;
-  'Women Safety Index': number | null;
-  'Average Winter Temperature': number | null;
-  'Average Summer Temperature': number | null;
-  Population: number | null;
-  'Energy Per Capita': number | null;
-  '% of Power from Fossil Fuels': number | null;
-  '% of Power from Nuclear': number | null;
-  '% of Power from Renewables': number | null;
-  '% of Agricultural Land': number | null;
-  '% of Forest Land': number | null;
-  Territory: number | null;
-  'Average Rainfall': number | null;
-  Corruption: number | null;
+  'Happiness (score 0-10)': number | null;
+  'Median Salary (USD/year)': number | null;
+  'Average Salary (USD/year)': number | null;
+  'Lowest Salary (USD/year)': number | null;
+  'Highest Salary (USD/year)': number | null;
+  'IQAir_AQI (AQI index)': number | null;
+  'Infant Survival Rate (per 1000 births)': number | null;
+  'Alcohol Consumption Rate (liters per capita per year)': number | null;
+  'Life Expectancy (years)': number | null;
+  Netflix: number | null;
+  'Women Safety Index (score 0-1)': number | null;
+  'Average Winter Temperature (°C)': number | null;
+  'Average Summer Temperature (°C)': number | null;
+  'Population (people)': number | null;
+  'Energy Per Capita (kWh per capita)': number | null;
+  '% of Power from Fossil Fuels (%)': number | null;
+  '% of Power from Nuclear (%)': number | null;
+  '% of Power from Renewables (%)': number | null;
+  '% of Agricultural Land (%)': number | null;
+  '% of Forest Land (%)': number | null;
+  'Territory (sq km)': number | null;
+  'Average Rainfall (mm/year)': number | null;
+  'Corruption (std score)': number | null;
   'Wheat Production (tonnes)': number | null;
   'Rye Production (tonnes)': number | null;
   'Potatoes Production (tonnes)': number | null;
-  'Meat, chicken Production (tonnes)': number | null;
+  'Meat, Chicken Production (tonnes)': number | null;
   'Avocados Production (tonnes)': number | null;
   'Petrol Price (USD/liter)': number | null;
-  'Daily Oil Consumption (Barrels)': number | null;
-  'CO2 Emissions (ton per capita)': number | null;
+  'Daily Oil Consumption (barrels/day)': number | null;
+  'CO2 Emissions (tonnes per capita)': number | null;
+  'Price per Square Meter to Buy Apartment in City Centre (USD/sqm)':
+    | number
+    | null;
+  'Fitness Club, Monthly Fee for 1 Adult (USD/month)': number | null;
+  'Internet (60 Mbps or More, Unlimited Data, Cable/ADSL) (USD/month)':
+    | number
+    | null;
+  'Coke/Pepsi (0.33 liter bottle, in restaurants) (USD/bottle)': number | null;
+  'Meal for 2 People, Mid-range Restaurant, Three-course (USD/meal)':
+    | number
+    | null;
+  'GDP Per Capita (USD/year)': number | null;
+  'Military Expenditure (USD/year)': number | null;
+  'Yearly Homicide Rate (% per 100,000 people) (per 100,000 people)':
+    | number
+    | null;
+  'Average Age (years)': number | null;
+  'Inflation Rate (year, %)': number | null;
 };
 
 type CountryStatsArray = CountryStats[];
@@ -63,7 +82,10 @@ function expectedLevel(
   const EPS = 1e-6;
 
   const pairs = data
-    .map((d) => ({ h: d.Happiness, m: d[metricName] as number | null }))
+    .map((d) => ({
+      h: d['Happiness (score 0-10)'],
+      m: d[metricName] as number | null,
+    }))
     .filter(
       (p): p is { h: number; m: number } =>
         typeof p.h === 'number' && typeof p.m === 'number' && !isNaN(p.h)

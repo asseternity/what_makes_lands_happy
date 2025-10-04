@@ -42,18 +42,28 @@ export function MetricsTable({ country, rows }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rows.map((r, i) => (
-          <TableRow key={i}>
-            <TableCell>{r.metric}</TableCell>
-            <TableCell>{r.actual.toFixed(2)}</TableCell>
-            <TableCell>{r.average.toFixed(2)}</TableCell>
-            <TableCell>{r.top.toFixed(2)}</TableCell>
-            <TableCell>{r.expected.toFixed(2)}</TableCell>
-            <TableCell>
-              {(((r.actual - r.expected) / r.expected) * 100).toFixed(1)}%
-            </TableCell>
-          </TableRow>
-        ))}
+        {rows.map((r, i) => {
+          const isHappiness = r.metric.toLowerCase().includes('happiness');
+          const diffPct =
+            !isHappiness && r.expected !== 0
+              ? ((r.actual - r.expected) / r.expected) * 100
+              : 0;
+
+          return (
+            <TableRow key={i}>
+              <TableCell>{r.metric}</TableCell>
+              <TableCell>{r.actual.toFixed(2)}</TableCell>
+              <TableCell>{r.average.toFixed(2)}</TableCell>
+              <TableCell>{r.top.toFixed(2)}</TableCell>
+              <TableCell>
+                {isHappiness ? '--' : r.expected.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                {isHappiness ? '--' : diffPct.toFixed(1) + '%'}
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

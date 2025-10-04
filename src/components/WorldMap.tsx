@@ -47,7 +47,7 @@ class SimpleZoomControl implements maplibregl.IControl {
     c.className = 'maplibregl-ctrl maplibregl-ctrl-group simple-zoom-ctrl';
     c.style.position = 'absolute';
     c.style.right = '0px';
-    c.style.transform = 'translateY(100%)';
+    c.style.transform = 'translateY(350%)';
     c.style.display = 'flex';
     c.style.flexDirection = 'column';
     c.style.gap = '6px';
@@ -100,7 +100,7 @@ type WorldMapProps = {
   countryStats?: Array<{
     Country: string;
     Country_clean: string;
-    Happiness: number;
+    'Happiness (score 0-10)': number;
   }>;
 };
 
@@ -144,9 +144,9 @@ export default function WorldMap({
     const normalizedToCanonical: Record<string, string> = {};
 
     for (const s of countryStats) {
-      if (s?.Country_clean && typeof s.Happiness === 'number') {
+      if (s?.Country_clean && typeof s['Happiness (score 0-10)'] === 'number') {
         const canonical = s.Country_clean;
-        canonicalHappiness[canonical] = s.Happiness;
+        canonicalHappiness[canonical] = s['Happiness (score 0-10)'];
 
         // prefer the provided display Country (exact) if available
         if (s.Country && typeof s.Country === 'string') {
@@ -271,5 +271,5 @@ export default function WorldMap({
     };
   }, [countryStats]);
 
-  return <div ref={mapContainerRef} className="w-full h-40" />;
+  return <div ref={mapContainerRef} className="w-full h-40 lg:h-130" />;
 }

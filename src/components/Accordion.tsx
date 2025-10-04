@@ -15,7 +15,7 @@ export function AccordionFooter() {
     >
       <AccordionItem value="item-1">
         <AccordionTrigger>What is this project?</AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 text-balance">
+        <AccordionContent className="flex flex-col gap-4 text-balance text-sm">
           <p>
             A data explorer that brings together many public datasets to help
             you understand what goes along with a country’s happiness score.
@@ -104,30 +104,76 @@ export function AccordionFooter() {
         <AccordionTrigger>Data sources</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <p>
-            Data is pulled from public and curated files. Each country detail
-            links to the original source and the year used.
+            World Happiness Report 2024 —
+            jainaru/world-happiness-report-2024-yearly-updated (Kaggle)
           </p>
-          <ul>
-            <li>
-              <strong>Examples of inputs:</strong> World Happiness, wage data,
-              life expectancy, energy and power mix, population, CO₂, food
-              production, petrol prices and more.
-            </li>
-            <li>
-              <strong>Updates & versions:</strong> datasets are cached and
-              refreshed periodically; references to sources are provided here.
-            </li>
-            <li>
-              <strong>Reporting issues:</strong> if you spot an error, source
-              corrections are tracked through the project repo.
-            </li>
-            <li>
-              <strong>Practical caveats:</strong> These are observational
-              patterns, not proof of cause. Percent differences can be
-              misleading when the expected value is near zero — in those cases
-              we show absolute or normalized numbers instead.
-            </li>
-          </ul>
+          <p>Global Salary Data — zedataweaver/global-salary-data (Kaggle)</p>
+          <p>
+            Most Polluted Cities and Countries (IQAir Index) —
+            ramjasmaurya/most-polluted-cities-and-countries-iqair-index (Kaggle)
+          </p>
+          <p>
+            Countries Life Expectancy —
+            amirhosseinmirzaie/countries-life-expectancy (Kaggle)
+          </p>
+          <p>
+            Netflix subscription fee in different countries —
+            prasertk/netflix-subscription-price-in-different-countries (Kaggle)
+          </p>
+          <p>
+            Most Dangerous Countries for Women 2024 —
+            arpitsinghaiml/most-dangerous-countries-for-women-2024 (Kaggle)
+          </p>
+          <p>
+            Average Monthly Surface Temperature (1940–2024) —
+            samithsachidanandan/average-monthly-surface-temperature-1940-2024
+            (Kaggle)
+          </p>
+          <p>
+            World Population Dataset —
+            iamsouravbanerjee/world-population-dataset (Kaggle)
+          </p>
+          <p>
+            World Energy Consumption — pralabhpoudel/world-energy-consumption
+            (Kaggle)
+          </p>
+          <p>
+            World Bank — World Development Indicators (Kaggle mirror) —
+            nicolasgonzalezmunoz/world-bank-world-development-indicators
+            (Kaggle)
+          </p>
+          <p>
+            World Food Production — rafsunahmad/world-food-production (Kaggle)
+          </p>
+          <p>
+            Petrol / Gas Prices Worldwide — zusmani/petrolgas-prices-worldwide
+            (Kaggle)
+          </p>
+          <p>
+            CO2 Emissions Around the World —
+            koustavghosh149/co2-emission-around-the-world (Kaggle)
+          </p>
+          <p>
+            Global Cost of Living (Numbeo scrape) —
+            mvieira101/global-cost-of-living (Kaggle)
+          </p>
+          <p>
+            GDP Per Capita (all countries) —
+            nitishabharathi/gdp-per-capita-all-countries (Kaggle)
+          </p>
+          <p>
+            Military Expenditure of Countries (1960–2019) —
+            nitinsss/military-expenditure-of-countries-19602019 (Kaggle)
+          </p>
+          <p>
+            Countries by Intentional Homicide Rate —
+            bilalwaseer/countries-by-intentional-homicide-rate (Kaggle)
+          </p>
+          <p>
+            Average Age of Countries — divyansh22/average-age-of-countries
+            (Kaggle)
+          </p>
+          <p>Inflation, 2022 — meeratif/inflation-2022 (Kaggle)</p>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

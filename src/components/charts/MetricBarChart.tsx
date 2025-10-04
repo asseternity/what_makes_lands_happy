@@ -45,7 +45,7 @@ export function MetricBarChart({
   const colors = ['#8884d8', '#006994', '#ffc658', '#ff7300'];
 
   return (
-    <div className="w-full h-40">
+    <div className="w-full h-80">
       <ResponsiveContainer>
         <BarChart data={data}>
           <XAxis dataKey="name" tick={{ fontSize: 10 }} />
