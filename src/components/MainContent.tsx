@@ -198,7 +198,7 @@ function MainContent() {
           </div>
           <div className="flex flex-col justify-center items-center gap-5 p-5">
             {countryData ? (
-              <div className="flex flex-row justify-center items-center gap-3 w-2/3 h-20 lg:h-12">
+              <div className="flex flex-row justify-center items-center gap-3 w-full h-20 lg:h-12">
                 <div className="flex-1 flex flex-col">
                   <div>
                     {titleCase(selectedCountry)} has the happiness rate of{' '}
