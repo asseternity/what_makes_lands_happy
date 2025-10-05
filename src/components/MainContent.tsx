@@ -4,7 +4,7 @@ import data from '../data/happiness_df.json';
 import weightData from '../data/happiness_corr.json';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Combobox } from './Combobox';
 import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
@@ -128,60 +128,25 @@ function MainContent() {
             className={
               mapMode
                 ? 'bg-secondary text-white border border-secondary'
-                : 'bg-primary text-gray-700 border border-gray-300'
+                : 'bg-primary text-white border border-gray-300'
             }
             onClick={() => setMapMode(true)}
           >
             Map
           </Button>
-
           <Button
             type="button"
             variant="outline"
             className={
               !mapMode
                 ? 'bg-secondary text-white border border-secondary'
-                : 'bg-primary text-gray-700 border border-gray-300'
+                : 'bg-primary text-white border border-gray-300'
             }
             onClick={() => setMapMode(false)}
           >
             About
           </Button>
-
-          <Input
-            type="email"
-            placeholder="Find a country"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                const found = data.find(
-                  (d) =>
-                    d.Country_clean.toLowerCase() === searchValue.toLowerCase()
-                );
-                setSelectedCountry(found ? found.Country_clean : searchValue);
-                setSearchValue('');
-              }
-            }}
-            className="placeholder:text-white placeholder:opacity-100"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="bg-primary"
-            onClick={() => {
-              const found = data.find(
-                (d) =>
-                  d.Country_clean.toLowerCase() === searchValue.toLowerCase()
-              );
-              if (found) {
-                setSelectedCountry(found.Country_clean);
-                setSearchValue('');
-              }
-            }}
-          >
-            Search
-          </Button>
+          <Combobox data={data} onSelect={setSelectedCountry} />
         </div>
       </div>
       {mapMode ? (
