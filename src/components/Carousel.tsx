@@ -4,7 +4,6 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import weightData from '../data/happiness_corr.json';
 import { useEffect, useMemo, useState } from 'react';
 import { MetricBarChart } from './charts/MetricBarChart';
 import type { CountryStats } from './ExpectedLevelCalculator';
@@ -18,7 +17,14 @@ function titleCase(s: string) {
     .join(' ');
 }
 
+type MetricCorrelationObject = {
+  metric: string;
+  weight_signed: number;
+  weight_magnitude: number;
+};
+
 type Props = {
+  weightData: MetricCorrelationObject[];
   flash?: boolean;
   countryName: string;
   countryMetrics: CountryStats | undefined | null;
@@ -26,6 +32,7 @@ type Props = {
 };
 
 export function CarouselOfCards({
+  weightData,
   flash = false,
   countryName,
   countryMetrics,

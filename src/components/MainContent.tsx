@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '/world-map-svgrepo-com.svg';
 import data from '../data/happiness_df.json';
+import weightData from '../data/happiness_corr.json';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WorldMap from './WorldMap';
 import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
+import { CorrelationBarChart } from './charts/CorrelationBarChart';
 import CountryProfile from './CountryProfile';
 import { expectedLevel, getMetricRange } from './ExpectedLevelCalculator';
 import type { CountryStats } from './ExpectedLevelCalculator';
@@ -223,6 +225,7 @@ function MainContent() {
               <div className="h-12"></div>
             )}
             <CarouselOfCards
+              weightData={weightData}
               flash={justChanged}
               countryName={selectedCountry}
               countryMetrics={countryData}
@@ -338,7 +341,11 @@ function MainContent() {
                 </li>
                 <li>Positive = above expected, Negative = below expected.</li>
               </ul>
-              <h2 className="font-bold text-accent text-xl mt-3">6. FAQ</h2>
+              <h2 className="font-bold text-accent text-xl mt-3">
+                6. Full Correlation Chart
+              </h2>
+              <CorrelationBarChart correlation_data={weightData} />
+              <h2 className="font-bold text-accent text-xl mt-3">7. FAQ</h2>
             </div>
             <AccordionFooter />
           </div>
