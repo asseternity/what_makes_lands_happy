@@ -42,7 +42,7 @@ export function Combobox({ data, onSelect }: Props) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between bg-transparent"
+          className="w-[150px] justify-between bg-transparent text-xs p-2"
         >
           {currentCountry
             ? sortedData.find((entry) => entry.Country_clean === currentCountry)

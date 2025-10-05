@@ -6,9 +6,8 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Combobox } from './Combobox';
 import WorldMap from './WorldMap';
-import { AccordionFooter } from './Accordion';
 import { CarouselOfCards } from './Carousel';
-import { CorrelationBarChart } from './charts/CorrelationBarChart';
+import About from './About';
 import CountryProfile from './CountryProfile';
 import { expectedLevel, getMetricRange } from './ExpectedLevelCalculator';
 import type { CountryStats } from './ExpectedLevelCalculator';
@@ -114,21 +113,25 @@ function MainContent() {
 
   return (
     <div className="myMainContainer container w-full min-h-screen flex flex-col bg-primary-foreground font-display relative">
-      <div className="myHeader bg-primary text-primary-foreground flex flex-row justify-between items-center gap-4 p-3 w-full h-12">
-        <div className="flex flex-row justify-start items-center gap-2">
+      <div className="myHeader bg-primary text-primary-foreground flex flex-row justify-between items-center gap-2 p-3 md:gap-4 md:p-3 w-full h-12">
+        <div className="flex flex-row justify-start items-center gap-0 md:gap-2">
           <a href="" target="_blank">
-            <img src={logo} className="logo h-10" alt="Vite logo" />
+            <img
+              src={logo}
+              className="logo hidden md:block h-10"
+              alt="Vite logo"
+            />
           </a>
-          <h1>Happiness Data</h1>
+          <h1 className="text-xs md:text-lg">Happiness Data</h1>
         </div>
-        <div className="flex w-full max-w-sm items-center gap-2">
+        <div className="flex max-w-sm items-center gap-1">
           <Button
             type="button"
             variant="outline"
             className={
               mapMode
-                ? 'bg-secondary text-white border border-secondary'
-                : 'bg-primary text-white border border-gray-300'
+                ? 'bg-secondary text-white border border-secondary text-xs p-2'
+                : 'bg-primary text-white border border-gray-300 text-xs p-2'
             }
             onClick={() => setMapMode(true)}
           >
@@ -139,8 +142,8 @@ function MainContent() {
             variant="outline"
             className={
               !mapMode
-                ? 'bg-secondary text-white border border-secondary'
-                : 'bg-primary text-white border border-gray-300'
+                ? 'bg-secondary text-white border border-secondary text-xs p-2'
+                : 'bg-primary text-white border border-gray-300 text-xs p-2'
             }
             onClick={() => setMapMode(false)}
           >
@@ -163,7 +166,7 @@ function MainContent() {
               />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center gap-5 p-5">
+          <div className="flex flex-col justify-center items-center gap-5 p-3">
             {countryData ? (
               <div className="flex flex-row justify-center items-center gap-3 w-full h-20 lg:h-12">
                 <div className="flex-1 flex flex-col">
@@ -199,122 +202,7 @@ function MainContent() {
           </div>
         </div>
       ) : (
-        <div className="w-full h-full flex justify-center items-center">
-          <div className="w-2/3 m-5">
-            <h1 className="font-bold text-primary text-2xl">
-              How "Expected" and "% Away from Expected" Work
-            </h1>
-
-            <h2 className="font-bold text-accent text-xl">
-              1. What the project is doing
-            </h2>
-            <p>
-              It combines many datasets (happiness, health, economy, etc.) into
-              one table for each country. For every metric (like salaries, CO₂,
-              life expectancy), it estimates what value we’d{' '}
-              <strong>expect</strong> a country to have based on its happiness
-              score. It then compares the country’s <em>actual</em> number to
-              that <em>expected</em> number, and shows the difference as a
-              percentage.
-            </p>
-
-            <h2 className="font-bold text-accent text-xl mt-3">
-              2. How “expected value” is found
-            </h2>
-            <ul>
-              <li>
-                Line up all countries by happiness score (lowest to highest).
-              </li>
-              <li>
-                Turn happiness scores into “percentiles” (like bottom 10%, top
-                50%, etc.).
-              </li>
-              <li>
-                Draw a simple trend line between happiness percentiles and
-                metric values.
-              </li>
-              <li>
-                For a country, check where its happiness falls on that line →
-                that gives the “expected” metric value.
-              </li>
-            </ul>
-
-            <div className="highlight">
-              <strong>In short:</strong> Expected value = what most countries
-              with similar happiness tend to have for that metric.
-            </div>
-
-            <h2 className="font-bold text-accent text-xl mt-3">
-              3. How “% away from expected” is calculated
-            </h2>
-            <p>Formula:</p>
-            <i>(Actual – Expected) ÷ Expected × 100</i>
-            <ul>
-              <li>
-                <strong>Positive %</strong> → the country has{' '}
-                <em>more than expected</em>.
-              </li>
-              <li>
-                <strong>Negative %</strong> → the country has{' '}
-                <em>less than expected</em>.
-              </li>
-            </ul>
-            <p>
-              <em>Example:</em> Expected life expectancy = 75 years, Actual = 80
-              years → +6.7% (better than expected).
-            </p>
-
-            <h2 className="font-bold text-accent text-xl mt-3">
-              4. How to read it
-            </h2>
-            <ul>
-              <li>
-                <strong>Strengths</strong>: actual {'>'} expected by a good
-                margin.
-              </li>
-              <li>
-                <strong>Weaknesses</strong>: actual {'<'} expected.
-              </li>
-              <li>±5% → basically “on track”.</li>
-              <li>±20% or more → clear strength or weakness.</li>
-            </ul>
-
-            <h2 className="font-bold text-accent text-xl mt-3">
-              5. Things to be careful about
-            </h2>
-            <ul>
-              <li>
-                <strong>Not cause and effect</strong>: higher or lower than
-                expected doesn’t prove it caused happiness.
-              </li>
-              <li>
-                <strong>Direction matters</strong>: higher is good for income,
-                bad for pollution.
-              </li>
-            </ul>
-
-            <div className="highlight">
-              ✅ In plain English:
-              <ul>
-                <li>
-                  “Expected” = what a country’s number <em>should</em> look like
-                  given its happiness score, based on world patterns.
-                </li>
-                <li>
-                  “% away from expected” = how much higher or lower the country
-                  actually is compared to that expectation.
-                </li>
-                <li>Positive = above expected, Negative = below expected.</li>
-              </ul>
-              <h2 className="font-bold text-accent text-xl mt-3">
-                6. Full Correlation Chart
-              </h2>
-              <CorrelationBarChart correlation_data={weightData} />
-              <h2 className="font-bold text-accent text-xl mt-3">7. FAQ</h2>
-            </div>
-            <AccordionFooter />
-          </div>
-        </div>
+        <About weightData={weightData} />
       )}
     </div>
   );

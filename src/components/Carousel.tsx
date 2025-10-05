@@ -130,7 +130,7 @@ export function CarouselOfCards({
           <CarouselItem key={currentIndex}>
             <div className="p-1">
               <Card
-                className={`lg:w-150 h-130 lg:h-120 bg-accent transition-transform-colors duration-300 ${
+                className={`lg:w-150 h-130 lg:h-120 bg-primary transition-transform-colors duration-300 ${
                   flash ? 'scale-90 bg-primary' : ''
                 }`}
               >

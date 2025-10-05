@@ -42,14 +42,14 @@ export function MetricBarChart({
     { name: `Top: ${titleCase(top.country)}`, value: top.value },
   ];
 
-  const colors = ['#8884d8', '#006994', '#ffc658', '#ff7300'];
+  const colors = ['#4dffbc', '#d9d9d9', '#ffc658', '#ff7300'];
 
   return (
     <div className="w-full h-80">
       <ResponsiveContainer>
         <BarChart data={data}>
-          <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-          <YAxis tick={{ fontSize: 10 }} />
+          <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'black' }} />
+          <YAxis tick={{ fontSize: 10, fill: 'black' }} />
           <Tooltip />
           <Bar dataKey="value" fill="#8884d8">
             {data.map((entry, index) => (
