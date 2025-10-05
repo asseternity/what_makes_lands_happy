@@ -27,7 +27,6 @@ function MainContent() {
   const [absoluteStatistics, setAbsoluteStatistics] = useState<
     AbsoluteMetricData[]
   >([]);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [countryData, setCountryData] = useState<CountryStats | null>(null);
   const [justChanged, setJustChanged] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -147,7 +146,7 @@ function MainContent() {
             }
             onClick={() => setMapMode(false)}
           >
-            About
+            Methods
           </Button>
           <Combobox data={data} onSelect={setSelectedCountry} />
         </div>
