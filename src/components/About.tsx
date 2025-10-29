@@ -49,14 +49,12 @@ export default function About({ weightData }: MetricCorrelationData) {
           Negative means the opposite. The absolute value is used to rank
           metrics by strength.
         </p>
-        <p className="mt-2">
-          Interpretation guidance:
-          <ul>
-            <li>|r| &lt; 0.2 — weak or no linear association.</li>
-            <li>0.2 ≤ |r| &lt; 0.5 — moderate association.</li>
-            <li>|r| ≥ 0.5 — strong association.</li>
-          </ul>
-        </p>
+        <p className="mt-2">Interpretation guidance:</p>
+        <ul>
+          <li>|r| &lt; 0.2 — weak or no linear association.</li>
+          <li>0.2 ≤ |r| &lt; 0.5 — moderate association.</li>
+          <li>|r| ≥ 0.5 — strong association.</li>
+        </ul>
 
         <h2 className="font-bold text-accent text-xl mt-4">
           What “Expected” means
@@ -89,14 +87,12 @@ export default function About({ weightData }: MetricCorrelationData) {
           means the country has more than expected. Negative means less than
           expected. Example: Expected life expectancy 75, actual 80 → +6.7%.
         </p>
-        <p>
-          Practical thresholds used on the site:
-          <ul>
-            <li>Within ±5% — on track.</li>
-            <li>±5–20% — notable difference.</li>
-            <li>±20% or more — strong outlier (worth deeper investigation).</li>
-          </ul>
-        </p>
+        <p>Practical thresholds used on the site:</p>
+        <ul>
+          <li>Within ±5% — on track.</li>
+          <li>±5–20% — notable difference.</li>
+          <li>±20% or more — strong outlier (worth deeper investigation).</li>
+        </ul>
 
         <h2 className="font-bold text-accent text-xl mt-4">
           How to read strengths and weaknesses

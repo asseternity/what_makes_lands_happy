@@ -28,15 +28,15 @@ export function CorrelationBarChart({
   const red = '#ff000d';
 
   return (
-    <div className="w-full h-300">
+    <div className="w-full h-450">
       <ResponsiveContainer>
         <BarChart data={data} layout="vertical">
           <XAxis type="number" tick={{ fontSize: 10 }} />
           <YAxis
             dataKey="metric"
             type="category"
-            tick={{ fontSize: 10 }}
-            width={150}
+            tick={{ fontSize: 8 }}
+            width={120}
           />
           <Tooltip />
           <Bar dataKey="weight_magnitude" fill="#8884d8">
